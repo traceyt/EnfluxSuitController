@@ -2,6 +2,7 @@
 * If you don't have Program Files (x86)/Windows Kits/10, then in Unity you will likely get "DLLNotFoundException" in the console
   * A work around seems to be downloading the "Windows Software Development Kit (SDK) for Windows 10" found [here](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk)
   * This installer will have several "features" to install. It seems like only the last option, "Windows SDK" is needed
+  * MSDN blog has some more info on the SDK [here]( https://blogs.msdn.microsoft.com/vcblog/2015/03/03/introducing-the-universal-crt/)
 * Driver for the Bluegiga dongle can be found [here](http://www.picaxe.com/downloads/bled112.zip)
 * Occaisionally, a hang up occurs and the dongle needs to be removed and then plugged back in. 
 
