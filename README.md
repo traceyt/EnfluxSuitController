@@ -57,6 +57,9 @@
 6. Under "Devices" observe Enflux modules and select "Connect"
 7. If first time using suit or change in environment, select "Run Calibration"
   * For about 30 seconds, move around a lot then select "Finish Calibration"
+  * Easiest to calibrate BEFORE putting on the suit. 
+    * Just try to get in several rotations that are very different from each other. 
+    * This is calibrating the magnetometers for the environment in which you are using the suit
 8. Select "Start Animate Mode" 
   * Timer will start counting down, this is time to get prepared for suit to start animating
   * May pause at "3" while connecting to suit
