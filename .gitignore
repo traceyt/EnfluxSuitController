@@ -73,3 +73,6 @@ obj/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+modulesDB/
+*.log

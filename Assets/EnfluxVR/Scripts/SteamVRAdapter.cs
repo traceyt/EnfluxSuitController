@@ -8,8 +8,7 @@ using UnityEngine;
 
 public class SteamVRAdapter : MonoBehaviour {
 
-    public GameObject hmd;
-    //TEMPORARY FIX
+    public GameObject hmd;    
     public Transform waist;
 
 	// Use this for initialization
@@ -24,7 +23,7 @@ public class SteamVRAdapter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (hmd != null)
+        if (hmd.name == "HMD_PLACEHLDER")
         {
             waist.localRotation = Quaternion.Inverse(hmd.transform.localRotation);
         }

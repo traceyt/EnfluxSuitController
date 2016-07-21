@@ -18,23 +18,18 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
     private float[] initLeftFore = new float[] { 0, 0, 0 };
     private float[] initRightUpper = new float[] { 0, 0, 0 };
     private float[] initRightFore = new float[] { 0, 0, 0 };
-    private Quaternion initCorePose = new Quaternion();
-    private Quaternion initRightUpperPose = new Quaternion();
-    private Quaternion initRightForePose = new Quaternion();
-    private Quaternion initLeftUpperPose = new Quaternion();
-    private Quaternion initLeftForePose = new Quaternion();
+    private Quaternion initHeadPose = new Quaternion();
+    private Quaternion initCorePose = new Quaternion();    
     private Queue<Quaternion> corePose = new Queue<Quaternion>();
     private Queue<Quaternion> rightUpperPose = new Queue<Quaternion>();
     private Queue<Quaternion> rightForePose = new Queue<Quaternion>();
     private Queue<Quaternion> leftUpperPose = new Queue<Quaternion>();
     private Queue<Quaternion> leftForePose = new Queue<Quaternion>();
 
-
     public void setInit()
     {
         initState = InitState.INIT;
-        StartCoroutine(setPoses());
-        
+        StartCoroutine(setPoses());        
     }
 
     public void resetInit()
@@ -45,12 +40,14 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
 
     private void setInitRot()
     {
-        initCorePose = jointRotations.rotateCore(new float[] {0, 0, initCore[2] }, new float[] { 0, 0, 0 }, 
+        initCorePose = jointRotations.rotateCore(new float[] { 0, 0, initCore[2] }, 
+            new float[] { 0, 0, 0 }, 
             hmd.localRotation);
 
         //set core rotation to get heading right
         core.localRotation = initCorePose;
 
+        initHeadPose = head.rotation;
     }
 
     private IEnumerator setPoses()
@@ -61,18 +58,17 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
             //only animate the head if there is a hmd
             if (getLiveHMD())
             {
-                head.localRotation = Quaternion.Inverse(core.localRotation) *
-                    hmd.localRotation;
+                head.rotation = hmd.rotation;
             }
 
             if (corePose.Count > 0)
             {
-                core.localRotation = corePose.Dequeue();                
+                core.localRotation = corePose.Dequeue();
             }
 
             if(rightUpperPose.Count > 0)
             {
-                rightUpper.localRotation = rightUpperPose.Dequeue();                               
+                rightUpper.localRotation = rightUpperPose.Dequeue();
             }
 
             if (rightForePose.Count > 0)
@@ -114,21 +110,21 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
         {
             //core node 1
             float[] coreAngles = new float[] { angles[1], angles[2], angles[3] };
-            chain = jointRotations.rotateCore(coreAngles, initCore, hmd.localRotation);
+            chain = jointRotations.rotateCore(coreAngles, initCore, hmd.localRotation);            
 
             corePose.Enqueue(chain);
 
             //Left Upper user node 2
             //90 deg transform puts sensor in correct orientation
             float[] luAngles = new float[] { angles[5], angles[6], angles[7] };
-            chain = jointRotations.rotateLeftArm(luAngles, core.localRotation, 
+            chain = jointRotations.rotateLeftArm(luAngles, core.localRotation,
                 hmd.localRotation);
 
             leftUpperPose.Enqueue(chain);
 
             //Left Fore node 4
-            float[] lfAngles = new float[] { angles[9], angles[10], angles[11] };
-            chain = jointRotations.rotateLeftForearm(lfAngles, core.localRotation, 
+            float[] lfAngles = new float[] { angles[9], angles[10], angles[11] };            
+            chain = jointRotations.rotateLeftForearm(lfAngles, core.localRotation,
                 leftUpper.localRotation, hmd.localRotation);
 
             leftForePose.Enqueue(chain);
