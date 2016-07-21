@@ -50,7 +50,7 @@
 
 ## Instructions for use
 1. Insert Bluegiga BLED112 dongle in a USB port on Windows PC
-2. Obtain and install drivers for BLED112 (link in Known Issues)
+2. Obtain and install drivers for BLED112 [link](http://www.picaxe.com/downloads/bled112.zip)
 3. Run Unity project
 4. Under "COM Ports" observer "Bluegiga Bluetooth Low Energy (COMX)"
 5. Select "Attach" and turn on EnfluxVR modules
