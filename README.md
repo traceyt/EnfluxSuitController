@@ -43,9 +43,9 @@
   * Select "[EnfluxVRHumanoid]", then drag "[CameraRig] > "Camera (head)" onto "Hmd" object of "EVRHumanoidLimbMap"
   * Select "[EnfluxVRHumanoid] > EVRUpperLimbMap" and drag "Camera (head)" onto "Hmd" object of "EVRUpperLimbMap"
   * Select "[EnfluxVRHumanoid] > EVRLowerLimbMap" and drag "Camera (head)" onto "Hmd" object of "EVRLowerLimbMap"
-6. In "Hierarchy" expand "[EnfluxVRHumanoid] > mike5 > Armature "
+6. In "Hierarchy" expand "[EnfluxVRHumanoid] > humanoid > Armature > "
 7. In "Hierarchy" select "SteamVRAdapter"
-  * drag "[EnfluxVRHumanoid] > mike5 > Armature > waist " onto "waist" object of "SteamVRAdapter"
+  * drag "[EnfluxVRHumanoid] > humanoid > Armature > waist " onto "waist" object of "SteamVRAdapter"
   * drag "[CameraRig] > Camera (head)" onto "Hmd" object of "SteamVRAdapter"
 
 ## Instructions for use
