@@ -4,7 +4,8 @@
   * This installer will have several "features" to install. It seems like only the last option, "Windows SDK" is needed
   * MSDN blog has some more info on the SDK [here]( https://blogs.msdn.microsoft.com/vcblog/2015/03/03/introducing-the-universal-crt/)
 * Driver for the Bluegiga dongle can be found [here](http://www.picaxe.com/downloads/bled112.zip)
-* Occaisionally, a hang up occurs and the dongle needs to be removed and then plugged back in. 
+* Occasionally, a hang up occurs and the dongle needs to be removed and then plugged back in. 
+* Connect freezes and Unity must be shut down. Best to remove dongle and plug back in at this time as well
 
 # EnfluxSuitController
 **Documentation and tutorial updating, check back frequently**
@@ -43,9 +44,9 @@
   * Select "[EnfluxVRHumanoid]", then drag "[CameraRig] > "Camera (head)" onto "Hmd" object of "EVRHumanoidLimbMap"
   * Select "[EnfluxVRHumanoid] > EVRUpperLimbMap" and drag "Camera (head)" onto "Hmd" object of "EVRUpperLimbMap"
   * Select "[EnfluxVRHumanoid] > EVRLowerLimbMap" and drag "Camera (head)" onto "Hmd" object of "EVRLowerLimbMap"
-6. In "Hierarchy" expand "[EnfluxVRHumanoid] > mike5 > Armature "
+6. In "Hierarchy" expand "[EnfluxVRHumanoid] > humanoid > Armature > "
 7. In "Hierarchy" select "SteamVRAdapter"
-  * drag "[EnfluxVRHumanoid] > mike5 > Armature > waist " onto "waist" object of "SteamVRAdapter"
+  * drag "[EnfluxVRHumanoid] > humanoid > Armature > waist " onto "waist" object of "SteamVRAdapter"
   * drag "[CameraRig] > Camera (head)" onto "Hmd" object of "SteamVRAdapter"
 
 ## Instructions for use
@@ -57,6 +58,9 @@
 6. Under "Devices" observe Enflux modules and select "Connect"
 7. If first time using suit or change in environment, select "Run Calibration"
   * For about 30 seconds, move around a lot then select "Finish Calibration"
+  * Easiest to calibrate BEFORE putting on the suit. 
+    * Just try to get in several rotations that are very different from each other. 
+    * This is calibrating the magnetometers for the environment in which you are using the suit
 8. Select "Start Animate Mode" 
   * Timer will start counting down, this is time to get prepared for suit to start animating
   * May pause at "3" while connecting to suit
