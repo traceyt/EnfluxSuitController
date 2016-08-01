@@ -4,7 +4,8 @@
   * This installer will have several "features" to install. It seems like only the last option, "Windows SDK" is needed
   * MSDN blog has some more info on the SDK [here]( https://blogs.msdn.microsoft.com/vcblog/2015/03/03/introducing-the-universal-crt/)
 * Driver for the Bluegiga dongle can be found [here](http://www.picaxe.com/downloads/bled112.zip)
-* Occaisionally, a hang up occurs and the dongle needs to be removed and then plugged back in. 
+* Occasionally, a hang up occurs and the dongle needs to be removed and then plugged back in. 
+* Connect freezes and Unity must be shut down. Best to remove dongle and plug back in at this time as well
 
 # EnfluxSuitController
 **Documentation and tutorial updating, check back frequently**
