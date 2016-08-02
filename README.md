@@ -67,3 +67,23 @@
 9. When countdown has completed, suit should be animating
 10. To stop, select "Stop Animate Mode" 
   * If done using suit, select "Disconnect" **CLICKING DISCONNECT BEFORE STOPPING THE GAME IS VERY IMPORTANT**
+
+## Instructions for scene "RecordDemo"
+1. Find and open scene under Assets > EnfluxVR > Scenes
+2. Find and open script "DataRecording" under Assets > EnfluxVR > Scripts
+3. Modify filename in line 36 as needed (DO NOT MODIFY THE PATH) and save file
+4. Run application as outline in the other sections of this README (Works best without headset)
+5. When ready, click "Start Recording"
+  * This will stored data in memory as animation is running
+6. When finished, click "Stop Recording"
+  * This will stop recording data and write what has been stored in memory to a file with the name specified in stop 3
+7. Stop app follow outline procedures in other sections
+8. Check Assets > PoseRecordings to see if filename specified in step 3 is there
+
+## Instructions for scene "PlaybackDemo"
+1. Find and open scene under Assets > EnfluxVR > Scenes
+2. Find and open script "PlaybackAnimator"
+3. Modify line 77 to any .csv filename found under Assets > PoseRecordings, then save file
+4. Run app
+5. Click "Start Playback" to run playback animation based on the file specified in step 3
+6. Click "Stop Playback" to discontinue animation
