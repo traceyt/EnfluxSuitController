@@ -28,4 +28,9 @@ public class OrientationAngles : MonoBehaviour, EVRHumanoidLimbMap.IGetOrientati
             return null;
         }
     }
+
+    public int Count()
+    {
+        return angles.Count;
+    }
 }
