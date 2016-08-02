@@ -23,9 +23,6 @@ public class SteamVRAdapter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (hmd.name == "HMD_PLACEHLDER")
-        {
-            waist.localRotation = Quaternion.Inverse(hmd.transform.localRotation);
-        }
+       
 	}
 }

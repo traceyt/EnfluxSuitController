@@ -11,8 +11,12 @@ public class EVRFullAnimator : EVRHumanoidLimbMap, ILimbAnimator {
 
     private ILimbAnimator upperAnim;
     private ILimbAnimator lowerAnim;
+    public DataRecording recorder;
     private float[] upper = new float[20];
     private float[] lower = new float[20];
+
+    //temporary
+    private bool shouldInit = false;
 
     // Use this for initialization
     void Start () {
@@ -21,11 +25,11 @@ public class EVRFullAnimator : EVRHumanoidLimbMap, ILimbAnimator {
 
         lowerAnim = GameObject.Find("EVRLowerLimbMap")
             .GetComponent<EVRLowerLimbMap>();
-	
 	}
 
     public void setInit()
     {
+        shouldInit = true;
         upperAnim.setInit();
         lowerAnim.setInit();
     }
@@ -45,6 +49,14 @@ public class EVRFullAnimator : EVRHumanoidLimbMap, ILimbAnimator {
 
             Buffer.BlockCopy(angles, 20 * sizeof(float), lower, 0, 20 * sizeof(float));
             lowerAnim.operate(lower);
+        }
+
+        if (recorder !=null && recorder.shouldRecord() || shouldInit)
+        {
+            recorder.addUpper((float[])upper.Clone());
+            recorder.addLower((float[])lower.Clone());
+
+            shouldInit = false;
         }
     }
 }
