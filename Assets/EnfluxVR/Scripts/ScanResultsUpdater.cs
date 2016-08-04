@@ -23,31 +23,41 @@ public class ScanResultsUpdater : MonoBehaviour {
     // Use this for initialization
     void Start () {
         status = state.state_notupdating;
-	
-	}
+        scannedDevices = ThreadDispatch.instance.GetScanItems();
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if(status == state.state_notupdating)
-        {
-            scannedDevices = ThreadDispatch.instance.GetScanItems();
-            if(scannedDevices != null)
-            {
-                StartCoroutine(processDevices());
-                status = state.state_updating;
-            }
-        }
+       
+    }
+
+    public void StartScanning()
+    {
+        StartCoroutine(processDevices());
+    }
+
+    public void StopScanning()
+    {
+        StopAllCoroutines();
     }
 
     private IEnumerator processDevices()
     {
-        foreach(var pair in scannedDevices)
+        while (true)
         {
-            updateView.postUpdate(pair.Value);
             yield return null;
+            if (scannedDevices != null)
+            {
+                foreach (var pair in scannedDevices)
+                {
+                    updateView.postUpdate(pair.Value);
+                }
+            }
+            else
+            {
+                scannedDevices = ThreadDispatch.instance.GetScanItems();
+            }
         }
-
-        status = state.state_notupdating;
     }
 
     public void setUpdateView(IScanUpdate view)

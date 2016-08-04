@@ -29,6 +29,7 @@ public class EVRSuitManager : MonoBehaviour
     private TcpClient client;
     private System.Diagnostics.Process serverProcess;
     private IAddOrientationAngles orientationAngles;
+    private ScanResultsUpdater scanUpdater;
 
     private enum ConnectionState
     {
@@ -72,6 +73,8 @@ public class EVRSuitManager : MonoBehaviour
         StartCoroutine(launchServer());
         orientationAngles = GameObject.Find("[EnfluxVRHumanoid]")
             .GetComponent<EVRHumanoidLimbMap>();
+
+        scanUpdater = GameObject.Find("ScanResultsUpdater").GetComponent<ScanResultsUpdater>();
     }
 
     void OnApplicationQuit()
@@ -146,6 +149,7 @@ public class EVRSuitManager : MonoBehaviour
                 if (EnfluxVRSuit.attachSelectedPort(comName, attachedPort) < 1)
                 {
                     operatingState = ConnectionState.ATTACHED;
+                    scanUpdater.StartScanning();
                 }else
                 {
                     Debug.Log("Error while trying to attach to port: " + comName);
@@ -181,6 +185,7 @@ public class EVRSuitManager : MonoBehaviour
             {
                 connectedDevices = devices;
                 operatingState = ConnectionState.CONNECTED;
+                scanUpdater.StopScanning();
                 Debug.Log("Devices connected");
             }
             else
@@ -203,6 +208,7 @@ public class EVRSuitManager : MonoBehaviour
                 Debug.Log("Devices disconnected");
                 client.Close();
                 operatingState = ConnectionState.DISCONNECTED;
+                scanUpdater.StartScanning();
             }
             else
             {
@@ -367,6 +373,7 @@ public class EVRSuitManager : MonoBehaviour
             if (EnfluxVRSuit.detachPort() < 1)
             {
                 operatingState = ConnectionState.DETACHED;
+                scanUpdater.StopScanning();
             }
             else
             {                

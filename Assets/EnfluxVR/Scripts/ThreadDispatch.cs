@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EnflxStructs;
+using UnityEngine;
 
 public class ThreadDispatch : IDispatcher
 {
@@ -35,7 +36,7 @@ public class ThreadDispatch : IDispatcher
     public void AddScanItem(scandata item)
     {
         lock (scanResults)
-        {
+        {            
             if (item.name == deviceName)
             {
                 if (scanResults.ContainsKey(item.addr))

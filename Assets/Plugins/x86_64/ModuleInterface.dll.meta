@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 38c94ad0ac2dfd14f8daa89f77582c19
-timeCreated: 1468644857
+guid: 018bdb86d4409dd49b2572e6d0dbbbe4
+timeCreated: 1470297968
 licenseType: Free
 PluginImporter:
   serializedVersion: 1
@@ -8,10 +8,6 @@ PluginImporter:
   executionOrder: {}
   isPreloaded: 0
   platformData:
-    Android:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
     Any:
       enabled: 1
       settings: {}
@@ -53,14 +49,6 @@ PluginImporter:
       enabled: 1
       settings:
         CPU: AnyCPU
-    WindowsStoreApps:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-        DontProcess: False
-        PlaceholderPath: 
-        SDK: AnySDK
-        ScriptingBackend: AnyScriptingBackend
   userData: 
   assetBundleName: 
   assetBundleVariant: 
