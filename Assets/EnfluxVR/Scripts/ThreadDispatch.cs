@@ -38,7 +38,7 @@ public class ThreadDispatch : IDispatcher
         lock (scanResults)
         {            
             if (item.name == deviceName)
-            {
+            {               
                 if (scanResults.ContainsKey(item.addr))
                 {
                     scanResults[item.addr].rssi = item.rssi;                    

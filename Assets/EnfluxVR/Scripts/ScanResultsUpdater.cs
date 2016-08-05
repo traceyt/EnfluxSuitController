@@ -53,10 +53,8 @@ public class ScanResultsUpdater : MonoBehaviour {
                     updateView.postUpdate(pair.Value);
                 }
             }
-            else
-            {
-                scannedDevices = ThreadDispatch.instance.GetScanItems();
-            }
+            
+            scannedDevices = ThreadDispatch.instance.GetScanItems();
         }
     }
 
