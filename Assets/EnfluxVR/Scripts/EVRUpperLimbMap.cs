@@ -98,7 +98,7 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
         if (initState == InitState.PREINIT && angles != null)
         {
             //do initialization            
-            Buffer.BlockCopy(angles, 1 * sizeof(float), initCore, 0, 3 * sizeof(float));
+            Buffer.BlockCopy((float[])angles.Clone(), 1 * sizeof(float), initCore, 0, 3 * sizeof(float));
             Buffer.BlockCopy(angles, 5 * sizeof(float), initLeftUpper, 0, 3 * sizeof(float));
             Buffer.BlockCopy(angles, 9 * sizeof(float), initLeftFore, 0, 3 * sizeof(float));
             Buffer.BlockCopy(angles, 13 * sizeof(float), initRightUpper, 0, 3 * sizeof(float));

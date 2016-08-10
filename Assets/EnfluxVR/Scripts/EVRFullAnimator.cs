@@ -11,7 +11,8 @@ public class EVRFullAnimator : EVRHumanoidLimbMap, ILimbAnimator {
 
     private ILimbAnimator upperAnim;
     private ILimbAnimator lowerAnim;
-    public DataRecording recorder;
+    public GameObject dataRecorder;
+    private DataRecording recorder;
     private float[] upper = new float[20];
     private float[] lower = new float[20];
 
@@ -25,6 +26,11 @@ public class EVRFullAnimator : EVRHumanoidLimbMap, ILimbAnimator {
 
         lowerAnim = GameObject.Find("EVRLowerLimbMap")
             .GetComponent<EVRLowerLimbMap>();
+
+        if(dataRecorder != null)
+        {
+            recorder = dataRecorder.GetComponent<DataRecording>();
+        }
 	}
 
     public void setInit()
@@ -44,19 +50,22 @@ public class EVRFullAnimator : EVRHumanoidLimbMap, ILimbAnimator {
     {
         if(angles != null)
         {
-            Buffer.BlockCopy(angles, 0, upper, 0, 20 * sizeof(float));
+            Buffer.BlockCopy((float[])angles.Clone(), 0, upper, 0, 20 * sizeof(float));
             upperAnim.operate(upper);
 
-            Buffer.BlockCopy(angles, 20 * sizeof(float), lower, 0, 20 * sizeof(float));
+            Buffer.BlockCopy((float[])angles.Clone(), 20 * sizeof(float), lower, 0, 20 * sizeof(float));
             lowerAnim.operate(lower);
         }
 
-        if (recorder !=null && recorder.shouldRecord() || shouldInit)
+        if (dataRecorder != null)
         {
-            recorder.addUpper((float[])upper.Clone());
-            recorder.addLower((float[])lower.Clone());
+            if(recorder.shouldRecord() || shouldInit)
+            {
+                recorder.addUpper((float[])upper.Clone());
+                recorder.addLower((float[])lower.Clone());
 
-            shouldInit = false;
+                shouldInit = false;
+            }
         }
     }
 }
