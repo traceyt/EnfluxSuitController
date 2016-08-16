@@ -11,24 +11,20 @@ using System.Collections.Generic;
 
 public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
 
+    public bool useCore = false;
     private JointRotations jointRotations = new JointRotations();
-    private Quaternion chain;
-    private Quaternion initWaistPose = new Quaternion();
     private float[] initWaist = new float[] { 0, 0, 0 };
     private float[] initLeftThigh = new float[] { 0, 0, 0 };
     private float[] initLeftShin = new float[] { 0, 0, 0 };
     private float[] initRightThigh = new float[] { 0, 0, 0 };
     private float[] initRightShin = new float[] { 0, 0, 0 };
+    private Quaternion chain;
+    private Quaternion initWaistPose = new Quaternion();
     private Queue<Quaternion> waistPose = new Queue<Quaternion>();
     private Queue<Quaternion> rightThighPose = new Queue<Quaternion>();
     private Queue<Quaternion> rightShinPose = new Queue<Quaternion>();
     private Queue<Quaternion> leftThighPose = new Queue<Quaternion>();
-    private Queue<Quaternion> leftShinPose = new Queue<Quaternion>();
-
-    // Use this for initialization
-    void Start () {
-	
-	}
+    private Queue<Quaternion> leftShinPose = new Queue<Quaternion>();   
 
     public void setInit()
     {

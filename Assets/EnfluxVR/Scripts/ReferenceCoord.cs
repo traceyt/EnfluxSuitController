@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿//========= Copyright 2016, Enflux Inc. All rights reserved. ===========
+//
+// Purpose: Provide a base/global reference frame for model. 
+// if HMD is present then this frame will rotate wrt to global, 
+// takes out inital heading
+//======================================================================
+
+using UnityEngine;
 using System.Collections;
 
 public class ReferenceCoord : MonoBehaviour {

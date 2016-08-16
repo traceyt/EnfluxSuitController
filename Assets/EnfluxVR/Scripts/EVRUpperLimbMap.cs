@@ -9,15 +9,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
-    JointRotations jointRotations = new JointRotations();
-    private Quaternion chain;
+public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
+{
 
+    private JointRotations jointRotations = new JointRotations();
     private float[] initCore = new float[] { 0, 0, 0 };
     private float[] initLeftUpper = new float[] { 0, 0, 0 };
     private float[] initLeftFore = new float[] { 0, 0, 0 };
     private float[] initRightUpper = new float[] { 0, 0, 0 };
     private float[] initRightFore = new float[] { 0, 0, 0 };
+    private Quaternion chain;
     private Quaternion initHeadPose = new Quaternion();
     private Quaternion initCorePose = new Quaternion();
     private Queue<Quaternion> corePose = new Queue<Quaternion>();
