@@ -11,7 +11,6 @@ using System.Collections.Generic;
 
 public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
 {
-
     private JointRotations jointRotations = new JointRotations();
     private float[] initCore = new float[] { 0, 0, 0 };
     private float[] initLeftUpper = new float[] { 0, 0, 0 };
@@ -27,6 +26,16 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
     private Queue<Quaternion> leftUpperPose = new Queue<Quaternion>();
     private Queue<Quaternion> leftForePose = new Queue<Quaternion>();
 
+    void Start()
+    {
+        refCoord = GameObject.Find("ReferenceCoord").transform;
+    }
+
+    public float[] getCoreInit()
+    {
+        return initCore;
+    }
+
     public void setInit()
     {
         initState = InitState.INIT;
@@ -41,7 +50,7 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
 
     private void setInitRot()
     {
-        initCorePose = jointRotations.rotateCore(new float[] { 0, 0, initCore[2] }, 
+        initCorePose = jointRotations.rotateCore(new float[] { 0, 0, 0 }, 
             new float[] { 0, 0, 0 }, refCoord.localRotation);
 
         //set core rotation to get heading right
@@ -99,10 +108,6 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
         {
             //do initialization            
             Buffer.BlockCopy((float[])angles.Clone(), 1 * sizeof(float), initCore, 0, 3 * sizeof(float));
-            Buffer.BlockCopy(angles, 5 * sizeof(float), initLeftUpper, 0, 3 * sizeof(float));
-            Buffer.BlockCopy(angles, 9 * sizeof(float), initLeftFore, 0, 3 * sizeof(float));
-            Buffer.BlockCopy(angles, 13 * sizeof(float), initRightUpper, 0, 3 * sizeof(float));
-            Buffer.BlockCopy(angles, 17 * sizeof(float), initRightFore, 0, 3 * sizeof(float));
 
             setInitRot();
 

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
 
     public bool useCore = false;
+    private EVRUpperLimbMap upperReference;
     private JointRotations jointRotations = new JointRotations();
     private float[] initWaist = new float[] { 0, 0, 0 };
     private float[] initLeftThigh = new float[] { 0, 0, 0 };
@@ -28,9 +29,13 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
     
     void Start()
     {
+
+        refCoord = GameObject.Find("ReferenceCoord").transform;
+
         if (useCore)
         {
-            core = GameObject.Find("EVRUpperLimbMap").GetComponent<EVRUpperLimbMap>().core;
+            upperReference = GameObject.Find("EVRUpperLimbMap").GetComponent<EVRUpperLimbMap>();
+            core = upperReference.core;
         }
     }   
 
@@ -93,11 +98,13 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
         {
             if (initState == InitState.PREINIT && angles != null)
             {
-                Buffer.BlockCopy((float[])angles.Clone(), 1 * sizeof(float), initWaist, 0, 3 * sizeof(float));
-                Buffer.BlockCopy(angles, 5 * sizeof(float), initLeftThigh, 0, 3 * sizeof(float));
-                Buffer.BlockCopy(angles, 9 * sizeof(float), initLeftShin, 0, 3 * sizeof(float));
-                Buffer.BlockCopy(angles, 13 * sizeof(float), initRightThigh, 0, 3 * sizeof(float));
-                Buffer.BlockCopy(angles, 17 * sizeof(float), initRightShin, 0, 3 * sizeof(float));
+                if (!useCore)
+                {
+                    Buffer.BlockCopy((float[])angles.Clone(), 1 * sizeof(float), initWaist, 0, 3 * sizeof(float));
+                }else
+                {
+                    initWaist = upperReference.getCoreInit();
+                }
 
                 setInitRot();
             }
