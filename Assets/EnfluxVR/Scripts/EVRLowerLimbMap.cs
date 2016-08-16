@@ -45,8 +45,8 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
 
     private void setInitRot()
     {
-        initWaistPose = jointRotations.rotateWaist(new float[] { 0, 0, initWaist[2] },
-            new float[] { 0, 0, 0 }, hmd.localRotation);
+        initWaistPose = jointRotations.rotateWaist(new float[] { 0, 0, 0 },
+            new float[] { 0, 0, 0 }, refCoord.localRotation);
 
         waist.localRotation = initWaistPose;
     }
@@ -101,36 +101,36 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
             else if (initState == InitState.INIT)
             {                
                 //core node 1
-                float[] waistAngles = new float[] { angles[1], angles[2], angles[3] };
-                chain = jointRotations.rotateWaist(waistAngles, initWaist, hmd.localRotation);
+                float[] waistAngles = new float[] { angles[1], angles[2], angles[3] - initWaist[2] };
+                chain = jointRotations.rotateWaist(waistAngles, initWaist, refCoord.localRotation);
 
                 waistPose.Enqueue(chain);
 
                 //Left Thigh
-                float[] ltAngles = new float[] { angles[5], angles[6], angles[7] };
+                float[] ltAngles = new float[] { angles[5], angles[6], angles[7] - initWaist[2] };
                 chain = jointRotations.rotateLeftLeg(ltAngles, waist.localRotation,
-                    hmd.localRotation);
+                    refCoord.localRotation);
 
                 leftThighPose.Enqueue(chain);
 
                 //Left shin
-                float[] lsAngles = new float[] { angles[9], angles[10], angles[11] };
+                float[] lsAngles = new float[] { angles[9], angles[10], angles[11] - initWaist[2] };
                 chain = jointRotations.rotateLeftShin(lsAngles, waist.localRotation,
-                    leftThigh.localRotation, hmd.localRotation);
+                    leftThigh.localRotation, refCoord.localRotation);
 
                 leftShinPose.Enqueue(chain);
 
                 //Right Thigh
-                float[] rtAngles = new float[] { angles[13], angles[14], angles[15] };
+                float[] rtAngles = new float[] { angles[13], angles[14], angles[15] - initWaist[2] };
                 chain = jointRotations.rotateRightLeg(rtAngles, waist.localRotation,
-                    hmd.localRotation);
+                    refCoord.localRotation);
 
                 rightThighPose.Enqueue(chain);
 
                 //Right shin
-                float[] rsAngles = new float[] { angles[17], angles[18], angles[19] };
+                float[] rsAngles = new float[] { angles[17], angles[18], angles[19] - initWaist[2] };
                 chain = jointRotations.rotateRightShin(rsAngles, waist.localRotation,
-                    rightThigh.localRotation, hmd.localRotation);
+                    rightThigh.localRotation, refCoord.localRotation);
 
                 rightShinPose.Enqueue(chain);
             }

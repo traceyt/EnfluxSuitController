@@ -3812,6 +3812,7 @@ MonoBehaviour:
   leftFore: {fileID: 0}
   rightUpper: {fileID: 0}
   rightFore: {fileID: 0}
+  refCoord: {fileID: 4000011886255452, guid: 0a92481e0fe88ee41a871bc7df19568c, type: 2}
   initState: 0
 --- !u!114 &11486882
 MonoBehaviour:
@@ -3838,6 +3839,7 @@ MonoBehaviour:
   leftFore: {fileID: 421070}
   rightUpper: {fileID: 476772}
   rightFore: {fileID: 426928}
+  refCoord: {fileID: 4000011886255452, guid: 0a92481e0fe88ee41a871bc7df19568c, type: 2}
   initState: 0
 --- !u!114 &11490680
 MonoBehaviour:
@@ -3864,6 +3866,7 @@ MonoBehaviour:
   leftFore: {fileID: 421070}
   rightUpper: {fileID: 476772}
   rightFore: {fileID: 426928}
+  refCoord: {fileID: 4000011886255452, guid: 0a92481e0fe88ee41a871bc7df19568c, type: 2}
   initState: 0
 --- !u!114 &11493868
 MonoBehaviour:
@@ -3890,7 +3893,9 @@ MonoBehaviour:
   leftFore: {fileID: 0}
   rightUpper: {fileID: 0}
   rightFore: {fileID: 0}
+  refCoord: {fileID: 0}
   initState: 0
+  dataRecorder: {fileID: 0}
 --- !u!137 &13769340
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -3900,17 +3905,20 @@ SkinnedMeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: 2faf412b0e3b8a64f8302d9179c3ad87, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_ReflectionProbeUsage: 1
   m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_SelectedWireframeHidden: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -3920,6 +3928,7 @@ SkinnedMeshRenderer:
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
+  m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 4300000, guid: 2121a04b47491f5468e3e14380de238a, type: 3}
   m_Bones:
   - {fileID: 499442}
