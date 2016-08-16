@@ -3814,7 +3814,7 @@ MonoBehaviour:
   rightFore: {fileID: 0}
   refCoord: {fileID: 4000010827431166, guid: a538229671a182840a3a66c32c54561d, type: 2}
   initState: 0
-  useCore: 0
+  useCore: 1
 --- !u!114 &11486882
 MonoBehaviour:
   m_ObjectHideFlags: 1
