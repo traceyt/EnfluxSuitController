@@ -24,7 +24,15 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
     private Queue<Quaternion> rightThighPose = new Queue<Quaternion>();
     private Queue<Quaternion> rightShinPose = new Queue<Quaternion>();
     private Queue<Quaternion> leftThighPose = new Queue<Quaternion>();
-    private Queue<Quaternion> leftShinPose = new Queue<Quaternion>();   
+    private Queue<Quaternion> leftShinPose = new Queue<Quaternion>();
+    
+    void Start()
+    {
+        if (useCore)
+        {
+            core = GameObject.Find("EVRUpperLimbMap").GetComponent<EVRUpperLimbMap>().core;
+        }
+    }   
 
     public void setInit()
     {
@@ -94,10 +102,16 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
                 setInitRot();
             }
             else if (initState == InitState.INIT)
-            {                
-                //core node 1
-                float[] waistAngles = new float[] { angles[1], angles[2], angles[3] - initWaist[2] };
-                chain = jointRotations.rotateWaist(waistAngles, initWaist, refCoord.localRotation);
+            {
+                if (!useCore)
+                {
+                    //core node 1
+                    float[] waistAngles = new float[] { angles[1], angles[2], angles[3] - initWaist[2] };
+                    chain = jointRotations.rotateWaist(waistAngles, initWaist, refCoord.localRotation);
+                }else
+                {
+                    chain = core.localRotation;
+                }
 
                 waistPose.Enqueue(chain);
 
