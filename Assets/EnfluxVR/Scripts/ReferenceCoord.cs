@@ -3,18 +3,35 @@ using System.Collections;
 
 public class ReferenceCoord : MonoBehaviour {
 
+    private GameObject vrAdapter;
     private Transform hmdTrans;
     private Quaternion baseReference = new Quaternion();
+    private bool adapterReady = false;
 
 	// Use this for initialization
 	void Start () {
-        hmdTrans = GameObject.Find("SteamVRAdapter").GetComponent<Transform>();
-        baseReference = hmdTrans.localRotation;
+        vrAdapter = GameObject.Find("SteamVRAdapter");
+
+        if (vrAdapter != null)
+        {
+            StartCoroutine(findAdapterAndReady());
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        gameObject.transform.localRotation = Quaternion.Inverse(baseReference) * 
+        if (adapterReady)
+        {
+            gameObject.transform.localRotation = Quaternion.Inverse(baseReference) *
             hmdTrans.localRotation;
+        }
 	}
+
+    private IEnumerator findAdapterAndReady()
+    {
+        yield return new WaitForSeconds(0.5f);
+        hmdTrans = vrAdapter.GetComponent<SteamVRAdapter>().getHmd().transform;
+        baseReference = hmdTrans.localRotation;
+        adapterReady = true;
+    }
 }

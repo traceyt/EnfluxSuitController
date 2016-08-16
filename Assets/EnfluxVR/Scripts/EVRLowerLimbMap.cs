@@ -25,7 +25,6 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
     private Queue<Quaternion> leftThighPose = new Queue<Quaternion>();
     private Queue<Quaternion> leftShinPose = new Queue<Quaternion>();
 
-
     // Use this for initialization
     void Start () {
 	
