@@ -41,25 +41,26 @@ public class EVRInitializationCounter : MonoBehaviour {
             delay = 5;
         }
 
-        int count = delay;       
+        int count = (delay * 2) + 1;        
 
         while (count > -1)
         {
-            yield return new WaitForSeconds(1.0f);
-            if (count != 0)
+            yield return new WaitForSeconds(0.5f);
+
+            if(count % 2 == 0)
             {
-                timerText.text = count.ToString();
-                 if (count == 2)
-                {
-                    _manager.enableAnimate();                    
-                }
+                timerText.text = (count/2).ToString();
             }
-            else
+
+            if (count  == 7)
             {
-                timerText.text = "Ready!";
-                _limbMap.initialize();
+                _manager.enableAnimate();
             }
+            
             count--;            
         }
+
+        timerText.text = "Ready!";
+        _limbMap.initialize();
     }
 }

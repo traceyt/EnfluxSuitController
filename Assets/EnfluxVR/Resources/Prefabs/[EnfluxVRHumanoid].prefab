@@ -3812,8 +3812,9 @@ MonoBehaviour:
   leftFore: {fileID: 0}
   rightUpper: {fileID: 0}
   rightFore: {fileID: 0}
-  refCoord: {fileID: 4000011886255452, guid: 0a92481e0fe88ee41a871bc7df19568c, type: 2}
+  refCoord: {fileID: 4000010827431166, guid: a538229671a182840a3a66c32c54561d, type: 2}
   initState: 0
+  useCore: 0
 --- !u!114 &11486882
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3839,7 +3840,7 @@ MonoBehaviour:
   leftFore: {fileID: 421070}
   rightUpper: {fileID: 476772}
   rightFore: {fileID: 426928}
-  refCoord: {fileID: 4000011886255452, guid: 0a92481e0fe88ee41a871bc7df19568c, type: 2}
+  refCoord: {fileID: 4000010827431166, guid: a538229671a182840a3a66c32c54561d, type: 2}
   initState: 0
 --- !u!114 &11490680
 MonoBehaviour:
@@ -3866,7 +3867,7 @@ MonoBehaviour:
   leftFore: {fileID: 421070}
   rightUpper: {fileID: 476772}
   rightFore: {fileID: 426928}
-  refCoord: {fileID: 4000011886255452, guid: 0a92481e0fe88ee41a871bc7df19568c, type: 2}
+  refCoord: {fileID: 4000010827431166, guid: a538229671a182840a3a66c32c54561d, type: 2}
   initState: 0
 --- !u!114 &11493868
 MonoBehaviour:
