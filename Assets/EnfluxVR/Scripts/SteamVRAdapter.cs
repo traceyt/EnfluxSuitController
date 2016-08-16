@@ -22,9 +22,9 @@ public class SteamVRAdapter : MonoBehaviour {
                 .AngleAxis(hmd.transform.rotation.eulerAngles.y, Vector3.up);
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-       
-	}
+
+    public GameObject getHmd()
+    {
+        return hmd;
+    }
 }

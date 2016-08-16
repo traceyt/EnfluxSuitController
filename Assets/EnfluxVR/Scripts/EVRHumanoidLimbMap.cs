@@ -26,6 +26,8 @@ public class EVRHumanoidLimbMap : MonoBehaviour, EVRSuitManager.IAddOrientationA
     public Transform rightUpper;
     public Transform rightFore;
 
+    public Transform refCoord;
+
     private OrientationAngles updateOrientations;
     private ILimbAnimator animator;
     private AnimState animState = AnimState.UNANIMATED;
