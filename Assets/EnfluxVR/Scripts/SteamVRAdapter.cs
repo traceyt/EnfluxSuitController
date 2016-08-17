@@ -33,7 +33,8 @@ public class SteamVRAdapter : MonoBehaviour {
     {
         if (waist != null && hmd != null)
         {
-            waist.transform.localRotation = Quaternion.Inverse(hmd.transform.localRotation) * waistStart;
+            waist.transform.localRotation = Quaternion.Inverse(hmd.transform.localRotation) * 
+                waistStart;
         }
     }
 
