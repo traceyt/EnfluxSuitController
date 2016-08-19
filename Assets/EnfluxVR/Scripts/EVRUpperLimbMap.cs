@@ -55,7 +55,7 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
 
         //set core rotation to get heading right
         //core.localRotation = initCorePose;
-
+        
         initHeadPose = head.rotation;
     }
 
@@ -65,9 +65,9 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
         {
 
             //only animate the head if there is a hmd
-            if (getLiveHMD())
+            if (hmdObject != null)
             {
-                head.rotation = hmd.rotation;
+                head.rotation = hmdObject.transform.rotation;
             }
 
             if (corePose.Count > 0)

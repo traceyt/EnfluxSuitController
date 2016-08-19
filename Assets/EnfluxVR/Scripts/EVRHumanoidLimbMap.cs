@@ -9,7 +9,7 @@ using System.Collections;
 
 public class EVRHumanoidLimbMap : MonoBehaviour, EVRSuitManager.IAddOrientationAngles
 {
-    public Transform hmd;
+    public GameObject hmdObject;
     public Transform head;
     public Transform root;
     public Transform cameraAnchor;
@@ -33,7 +33,6 @@ public class EVRHumanoidLimbMap : MonoBehaviour, EVRSuitManager.IAddOrientationA
     private AnimState animState = AnimState.UNANIMATED;
     public InitState initState = InitState.PREINIT;
     private string requestMode;
-    private bool liveHMD = true;
 
     private enum AnimState
     {
@@ -59,11 +58,6 @@ public class EVRHumanoidLimbMap : MonoBehaviour, EVRSuitManager.IAddOrientationA
     void Start () {
         updateOrientations = GameObject.Find("OrientationAngles")
             .GetComponent<OrientationAngles>();
-
-        if (hmd.name == "HMD_PLACEHOLDER")
-        {
-            liveHMD = false;
-        }
     }
 
     private IEnumerator anglesUpdater()
@@ -74,12 +68,7 @@ public class EVRHumanoidLimbMap : MonoBehaviour, EVRSuitManager.IAddOrientationA
             animator.operate(updated);
             yield return null;
         }
-    }
-
-    public bool getLiveHMD()
-    {
-        return liveHMD;
-    }
+    }    
 
     public void initialize()
     {

@@ -259,11 +259,12 @@ public class EVRSuitManager : MonoBehaviour
         }
     }
 
-    public void enableAnimate()
+    public void enableAnimate(bool record)
     {
-        if(operatingState == ConnectionState.CONNECTED)
+        
+        if (operatingState == ConnectionState.CONNECTED)
         {
-            if (EnfluxVRSuit.streamRealTime(connectedDevices.Count) < 1)
+            if (EnfluxVRSuit.streamRealTime(connectedDevices.Count, record) < 1)
             {
                 operatingState = ConnectionState.STREAMING;
                 StartCoroutine(readAngles());
