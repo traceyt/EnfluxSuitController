@@ -6,6 +6,7 @@
 * Driver for the Bluegiga dongle can be found [here](http://www.picaxe.com/downloads/bled112.zip)
 * Occasionally, a hang up occurs and the dongle needs to be removed and then plugged back in. 
 * Connect freezes and Unity must be shut down. Best to remove dongle and plug back in at this time as well
+* **HAVING SOME SIGNAL STRENGTH ISSUES WITH THE PANTS, SEE INSTRUCTIONS FOR WORKAROUND**
 
 # EnfluxSuitController
 **Documentation and tutorial updating, check back frequently**
@@ -32,6 +33,9 @@
   * From EnfluxVR > Resources > Prefabs, drag EnfluxPanel onto Canvas
   * **Dragging EnfluxPanel into Scene rather than Hierarchy may have incorrect result**
 9. Move camera as needed
+* **OPTIONAL PANTS WORKAROUND** 
+10. Under [EnfluxVRHumanoid] > EVRLowerLimbMap check Use Core
+    * This will control waist transform using data from core sensor
 
 ## Instructions for setup w/ HTC Vive headset
 1. Obtain and import SteamVR Unity SDK
