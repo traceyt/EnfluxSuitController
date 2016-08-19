@@ -33,7 +33,7 @@ public class DataRecording : MonoBehaviour {
     {
         //get from list
         //format to print to csv
-        using (var writer = new StreamWriter("Assets/PoseRecordings/TableTopLeftArm.csv"))
+        using (var writer = new StreamWriter("Assets/PoseRecordings/raw.csv"))
         {            
             for (int i = 0; i < record_upper.Count; i++)
             {                

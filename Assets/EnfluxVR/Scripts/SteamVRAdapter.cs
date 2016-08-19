@@ -25,7 +25,8 @@ public class SteamVRAdapter : MonoBehaviour {
 
         if( waist != null)
         {
-            waistStart = waist.transform.localRotation;
+            waistStart = Quaternion
+                .AngleAxis(hmd.transform.rotation.eulerAngles.y, Vector3.up);
         }
     }
 

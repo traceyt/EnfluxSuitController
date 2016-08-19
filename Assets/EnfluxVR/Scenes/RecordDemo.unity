@@ -13,7 +13,7 @@ SceneSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -37,12 +37,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0.45110506, g: 0.50110334, b: 0.575332, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_GIWorkflowMode: 0
-  m_LightmapsMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -53,17 +53,22 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 3
+    serializedVersion: 4
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
     m_TextureHeight: 1024
+    m_AO: 0
     m_AOMaxDistance: 1
-    m_Padding: 2
     m_CompAOExponent: 0
+    m_CompAOExponentDirect: 0
+    m_Padding: 2
     m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
     m_TextureCompression: 1
+    m_DirectLightInLightProbes: 1
     m_FinalGather: 0
+    m_FinalGatherFiltering: 1
     m_FinalGatherRayCount: 1024
     m_ReflectionCompression: 2
   m_LightingDataAsset: {fileID: 0}
@@ -282,6 +287,10 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 238352845}
   m_Script: {fileID: 11500000, guid: 78100d43a6f35b44e99877094a1cdcd9, type: 3}
+--- !u!1 &238352847 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 128494, guid: 4c72bd8747ab5ed4ba0d5a187febd1f0, type: 2}
+  m_PrefabInternal: {fileID: 238352845}
 --- !u!1 &474759464
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,7 +503,7 @@ Light:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 743832095}
   m_Enabled: 1
-  serializedVersion: 6
+  serializedVersion: 7
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
@@ -504,6 +513,7 @@ Light:
   m_Shadows:
     m_Type: 2
     m_Resolution: -1
+    m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0.05
     m_NormalBias: 0.4
@@ -516,10 +526,10 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
-  m_AreaSize: {x: 1, y: 1}
 --- !u!4 &743832097
 Transform:
   m_ObjectHideFlags: 0
@@ -653,6 +663,10 @@ Prefab:
       propertyPath: recorder
       value: 
       objectReference: {fileID: 238352846}
+    - target: {fileID: 11493868, guid: 9604a0659de6511439e41263667570c9, type: 2}
+      propertyPath: dataRecorder
+      value: 
+      objectReference: {fileID: 238352847}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9604a0659de6511439e41263667570c9, type: 2}
   m_IsPrefabParent: 0

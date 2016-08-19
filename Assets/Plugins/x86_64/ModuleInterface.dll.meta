@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: f3d0b7e08c4d13c40852ec158113c171
-timeCreated: 1470911111
+timeCreated: 1471565140
 licenseType: Free
 PluginImporter:
   serializedVersion: 1
@@ -16,7 +16,6 @@ PluginImporter:
       settings:
         CPU: x86_64
         DefaultValueInitialized: true
-        OS: Windows
     Linux:
       enabled: 0
       settings:
@@ -49,14 +48,6 @@ PluginImporter:
       enabled: 1
       settings:
         CPU: AnyCPU
-    WindowsStoreApps:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-        DontProcess: False
-        PlaceholderPath: 
-        SDK: AnySDK
-        ScriptingBackend: AnyScriptingBackend
   userData: 
   assetBundleName: 
   assetBundleVariant: 
