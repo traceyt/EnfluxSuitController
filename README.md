@@ -21,16 +21,16 @@
 ## Instructions for setup w/o headset
 1. Download EnfluxVR Unity SDK
 2. Start or open a Unity project
-3. Under the tab "Assets" select  "Import Package > Custom Package"
-4. Navigate to folder containing "EnfluxVR.unitypackage" and select package
-5. A window will open, select "Import"
-6. Under "Project" tab, expand "EnfluxVR > Resources > Prefabs"
-7. Drag and drop the following into "Hierarchy"
-  * "[EnfluxVR]"
-  * "[EnfluxVRHumanoid]"
-8. If one is not already in the project, add a "Canvas"
-  * From "EnfluxVR > Resources > Prefabs", drag "EnfluxPanel" onto "Canvas"
-  * **Dragging "EnfluxPanel" into "Scene" rather than "Hierarchy" may have incorrect result**
+3. Under the tab Assets select Import Package > Custom Package
+4. Navigate to folder containing EnfluxVR.unitypackage and select package
+5. A window will open, select Import
+6. Under Project tab, expand EnfluxVR > Resources > Prefabs
+7. Drag and drop the following into Hierarchy
+  * [EnfluxVR]
+  * [EnfluxVRHumanoid]
+8. If one is not already in the project, add a Canvas
+  * From EnfluxVR > Resources > Prefabs, drag EnfluxPanel onto Canvas
+  * **Dragging EnfluxPanel into Scene rather than Hierarchy may have incorrect result**
 9. Move camera as needed
 
 ## Instructions for setup w/ HTC Vive headset
