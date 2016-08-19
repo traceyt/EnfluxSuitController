@@ -37,7 +37,7 @@
 1. Obtain and import SteamVR Unity SDK
 2. Under Project tab, expand SteamVR
   * From SteamVR > Prefabs drag [CameraRig] into Hierarchy
-  * **Dragging into "Scene" may produce incorrect result"**
+  * **Dragging into Scene may produce incorrect result"**
 3. If not completed already, follow all **Instructions for setup w/o headset**
 4. From EnfluxVR > Resources > Prefabs drag SteamVRAdapter into Hierarchy
 5. In Hierarchy, expand [EnfluxVRHumanoid] and [CameraRig] > Camera (head)
