@@ -41,7 +41,7 @@ internal static class EnfluxVRSuit {
         public static extern int finishCalibration(int numdevices);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int streamRealTime(int numdevices);
+        public static extern int streamRealTime(int numdevices, bool record);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int stopRealTime(int numdevices);
@@ -67,9 +67,9 @@ internal static class EnfluxVRSuit {
         return EVRSUIT_0_0_1.finishCalibration(numdevices);
     }
 
-    public static int streamRealTime(int numdevices)
+    public static int streamRealTime(int numdevices, bool record)
     {
-        return EVRSUIT_0_0_1.streamRealTime(numdevices);
+        return EVRSUIT_0_0_1.streamRealTime(numdevices, record);
     }
 
     public static int stopRealTime(int numdevices)

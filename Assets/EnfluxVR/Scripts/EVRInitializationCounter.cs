@@ -11,6 +11,7 @@ using System.Collections;
 public class EVRInitializationCounter : MonoBehaviour {
 
     public int delay = 5;
+    public bool record;
     private Text timerText;
     private EVRSuitManager _manager;
     private EVRHumanoidLimbMap _limbMap;
@@ -41,7 +42,7 @@ public class EVRInitializationCounter : MonoBehaviour {
             delay = 5;
         }
 
-        int count = (delay * 2) + 1;        
+        int count = (delay + 1) * 2;        
 
         while (count > -1)
         {
@@ -54,7 +55,7 @@ public class EVRInitializationCounter : MonoBehaviour {
 
             if (count  == 7)
             {
-                _manager.enableAnimate();
+                _manager.enableAnimate(record);
             }
             
             count--;            
