@@ -35,19 +35,19 @@
 
 ## Instructions for setup w/ HTC Vive headset
 1. Obtain and import SteamVR Unity SDK
-2. Under "Project" tab, expand "SteamVR"
-  * From "SteamVR > Prefabs" drag "[CameraRig]" into "Hierarchy"
+2. Under Project tab, expand SteamVR
+  * From SteamVR > Prefabs drag [CameraRig] into Hierarchy
   * **Dragging into "Scene" may produce incorrect result"**
 3. If not completed already, follow all **Instructions for setup w/o headset**
-4. From "EnfluxVR > Resources > Prefabs" drag "SteamVRAdapter" into "Hierarchy"
-5. In "Hierarchy", expand "[EnfluxVRHumanoid]" and "[CameraRig]"
-  * Select "[EnfluxVRHumanoid]", then drag "[CameraRig] > "Camera (head)" onto "Hmd" object of "EVRHumanoidLimbMap"
-  * Select "[EnfluxVRHumanoid] > EVRUpperLimbMap" and drag "Camera (head)" onto "Hmd" object of "EVRUpperLimbMap"
-  * Select "[EnfluxVRHumanoid] > EVRLowerLimbMap" and drag "Camera (head)" onto "Hmd" object of "EVRLowerLimbMap"
-6. In "Hierarchy" expand "[EnfluxVRHumanoid] > humanoid > Armature > "
-7. In "Hierarchy" select "SteamVRAdapter"
-  * drag "[EnfluxVRHumanoid] > humanoid > Armature > waist " onto "waist" object of "SteamVRAdapter"
-  * drag "[CameraRig] > Camera (head)" onto "Hmd" object of "SteamVRAdapter"
+4. From EnfluxVR > Resources > Prefabs drag SteamVRAdapter into Hierarchy
+5. In Hierarchy, expand [EnfluxVRHumanoid] and [CameraRig] > Camera (head)
+  * Select [EnfluxVRHumanoid] > EVRUpperLimbMap and drag Camera (eye) onto Hmd Object of EVRUpperLimbMap
+  * Select [EnfluxVRHumanoid] > EVRLowerLimbMap and drag Camera (eye) onto Hmd object of EVRLowerLimbMap
+6. In Hierarchy expand [EnfluxVRHumanoid] > humanoid > Armature > 
+7. In Hierarchy select SteamVRAdapter
+  * drag [CameraRig] > Camera (head) > Camera (eye) onto Hmd of SteamVRAdapter
+  * **THE FOLLOWING STEP IS OPTIONAL AND SHOULD ONLY BE USED IF YOU ARE NOT WORKING WITH THE PANTS**
+  * drag [EnfluxVRHumanoid] > humanoid > Armature > waist onto Waist of SteamVRAdapter
 
 ## Instructions for use
 1. Insert Bluegiga BLED112 dongle in a USB port on Windows PC
