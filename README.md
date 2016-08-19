@@ -49,7 +49,7 @@
   * **THE FOLLOWING STEP IS OPTIONAL AND SHOULD ONLY BE USED IF YOU ARE NOT WORKING WITH THE PANTS**
   * drag [EnfluxVRHumanoid] > humanoid > Armature > waist onto Waist of SteamVRAdapter
 
-## Instructions for use
+## Instructions for use w/o headset
 1. Insert Bluegiga BLED112 dongle in a USB port on Windows PC
 2. Obtain and install drivers for BLED112 [link](http://www.picaxe.com/downloads/bled112.zip)
 3. Run Unity project
@@ -57,7 +57,7 @@
 5. Select Attach, then turn on EnfluxVR modules
 6. Under Devices observe Enflux modules and select Connect
 7. If first time using suit or change in environment, select Run Calibration
-  * Calibration Tutorial
+  * [Calibration Tutorial](https://youtu.be/HKrl9DVYESI)
 8. Select Start Animate Mode 
   * Timer will start counting down, **USER NEEDS TO BE STANDING STILL WHEN COUNTDOWN REACHES 4**
   * May pause from 4 to 3 while connecting to suit
@@ -65,22 +65,46 @@
 10. To stop, select Stop Animate Mode 
   * If done using suit, select Disconnect **CLICKING DISCONNECT BEFORE STOPPING THE GAME IS VERY IMPORTANT**
 
-## Instructions for scene "RecordDemo"
+## Instructions for use w/ HTC Vive headset
+* For time being, these steps need to be followed from a place where computer is easily accessible
+1. Point headset in desired starting direction **Easiest is to point headset direction at monitor**
+2. Run application
+3. Follow steps **Instructions for use w/o headset** but omit Calibration step
+
+# Prebuilt Scenes
+* These can be found under EnfluxVR > Scenes
+
+## EnfluxSuitSetup
+* This is a scene setup following **Instructions for setup w/o headset**
+
+## RecordRaw 
+* Same as EnfluxSuitSetup, but when run, will create a file named "rawvals.csv" in the project's main folder
+
+## SetupVR
+* Setup following **Instructions for setup w/ HTC Vive headset** minus the steps requiring SteamVR
+
+## RecordDemo
+* Setup so that data from animation is logged into a user specified .csv, see instructions. **NOT TESTED WITH HEADSET**
+
+## PlaybackDemo
+* Animate model based on recorded data in a .csv. See instructions.
+
+## Instructions for scene RecordDemo
 1. Find and open scene under Assets > EnfluxVR > Scenes
-2. Find and open script "DataRecording" under Assets > EnfluxVR > Scripts
+2. Find and open script DataRecording under Assets > EnfluxVR > Scripts
 3. Modify filename in line 36 as needed (DO NOT MODIFY THE PATH) and save file
 4. Run application as outline in the other sections of this README (Works best without headset)
-5. When ready, click "Start Recording"
+5. When ready, click Start Recording
   * This will stored data in memory as animation is running
-6. When finished, click "Stop Recording"
+6. When finished, click Stop Recording
   * This will stop recording data and write what has been stored in memory to a file with the name specified in stop 3
 7. Stop app follow outline procedures in other sections
 8. Check Assets > PoseRecordings to see if filename specified in step 3 is there
 
-## Instructions for scene "PlaybackDemo"
+## Instructions for scene PlaybackDemo
 1. Find and open scene under Assets > EnfluxVR > Scenes
-2. Find and open script "PlaybackAnimator"
+2. Find and open script PlaybackAnimator
 3. Modify line 77 to any .csv filename found under Assets > PoseRecordings, then save file
 4. Run app
-5. Click "Start Playback" to run playback animation based on the file specified in step 3
-6. Click "Stop Playback" to discontinue animation
+5. Click Start Playback to run playback animation based on the file specified in step 3
+6. Click Stop Playback to discontinue animation
