@@ -53,20 +53,17 @@
 1. Insert Bluegiga BLED112 dongle in a USB port on Windows PC
 2. Obtain and install drivers for BLED112 [link](http://www.picaxe.com/downloads/bled112.zip)
 3. Run Unity project
-4. Under "COM Ports" observe "Bluegiga Bluetooth Low Energy (COMX)"
-5. Select "Attach" and turn on EnfluxVR modules
-6. Under "Devices" observe Enflux modules and select "Connect"
-7. If first time using suit or change in environment, select "Run Calibration"
-  * For about 30 seconds, move around a lot then select "Finish Calibration"
-  * Easiest to calibrate BEFORE putting on the suit. 
-    * Just try to get in several rotations that are very different from each other. 
-    * This is calibrating the magnetometers for the environment in which you are using the suit
-8. Select "Start Animate Mode" 
-  * Timer will start counting down, this is time to get prepared for suit to start animating
-  * May pause at "3" while connecting to suit
+4. Under COM Ports observe Bluegiga Bluetooth Low Energy (COMX)
+5. Select Attach, then turn on EnfluxVR modules
+6. Under Devices observe Enflux modules and select Connect
+7. If first time using suit or change in environment, select Run Calibration
+  * Calibration Tutorial
+8. Select Start Animate Mode 
+  * Timer will start counting down, **USER NEEDS TO BE STANDING STILL WHEN COUNTDOWN REACHES 4**
+  * May pause from 4 to 3 while connecting to suit
 9. When countdown has completed, suit should be animating
-10. To stop, select "Stop Animate Mode" 
-  * If done using suit, select "Disconnect" **CLICKING DISCONNECT BEFORE STOPPING THE GAME IS VERY IMPORTANT**
+10. To stop, select Stop Animate Mode 
+  * If done using suit, select Disconnect **CLICKING DISCONNECT BEFORE STOPPING THE GAME IS VERY IMPORTANT**
 
 ## Instructions for scene "RecordDemo"
 1. Find and open scene under Assets > EnfluxVR > Scenes
