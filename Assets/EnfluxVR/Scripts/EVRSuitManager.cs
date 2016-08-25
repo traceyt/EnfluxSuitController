@@ -110,9 +110,10 @@ public class EVRSuitManager : MonoBehaviour
     private IEnumerator launchServer()
     {
         serverProcess = new System.Diagnostics.Process();
-        string dir = Path.Combine(Environment.CurrentDirectory, "Assets/Plugins/Sensors");
-        string file = Path.Combine(dir, "EVRModuleServer.jar");
-        serverProcess.StartInfo.FileName = file;
+        //string dir = Path.Combine(Environment.CurrentDirectory, "Assets/Plugins/Sensors");
+        string filePath = Path.Combine(Application.streamingAssetsPath + "/Sensors/", 
+            "EVRModuleServer.jar");
+        serverProcess.StartInfo.FileName = filePath;
         if (serverProcess.Start())
         {
             Debug.Log("Socket server started");

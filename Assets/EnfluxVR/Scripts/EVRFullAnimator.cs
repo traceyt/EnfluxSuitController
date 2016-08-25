@@ -61,6 +61,7 @@ public class EVRFullAnimator : EVRHumanoidLimbMap, ILimbAnimator {
         {
             if(recorder.shouldRecord() || shouldInit)
             {
+                Debug.Log("AM HERE");
                 recorder.addUpper((float[])upper.Clone());
                 recorder.addLower((float[])lower.Clone());
 

@@ -7,7 +7,7 @@ public class DataRecording : MonoBehaviour {
 
     private List<float[]> record_upper = new List<float[]>();
     private List<float[]> record_lower = new List<float[]>();
-    bool record = false;
+    private bool record = false;
 
     public void setRecordState(bool state)
     {
@@ -33,10 +33,14 @@ public class DataRecording : MonoBehaviour {
     {
         //get from list
         //format to print to csv
-        using (var writer = new StreamWriter("Assets/PoseRecordings/raw.csv"))
-        {            
+
+        string filePath = Path.Combine(Application.streamingAssetsPath +
+           "/PoseRecordings/", "test.csv");
+
+        using (var writer = new StreamWriter("Assets/StreamingAssets/PoseRecordings/test.csv"))
+        {
             for (int i = 0; i < record_upper.Count; i++)
-            {                
+            {
                 float[] _lower = record_lower[i];
                 float[] _upper = record_upper[i];
 

@@ -42,7 +42,11 @@ public class PlaybackAnimator : MonoBehaviour {
 
     public void readInData(string filename)
     {
-        var reader = new StreamReader(File.OpenRead("Assets/PoseRecordings/" + filename));
+
+        string filePath = Path.Combine(Application.streamingAssetsPath +
+            "/PoseRecordings/", filename);
+
+        var reader = new StreamReader(File.OpenRead(filePath));
 
         while (!reader.EndOfStream)
         {
