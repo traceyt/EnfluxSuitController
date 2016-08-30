@@ -81,15 +81,29 @@ public class EVRSuitManager : MonoBehaviour
     {
         //Just in case some steps were skipped
         Debug.Log("Making sure things are closed down");
-        /**
-         * Skips state check to be certain that port and background thread is
-         * shutdown
-         * */
+        // Make sure sensors are disconnected, port is detached,
+        // and client connection closed
+
+        if(operatingState != ConnectionState.NONE || 
+            operatingState != ConnectionState.DETACHED || 
+            operatingState != ConnectionState.DISCONNECTED)
+        {
+            if(operatingState == ConnectionState.STREAMING)
+            {
+                disableAnimate();
+            }
+
+            disconnectEnflux();
+        }
+
         if (operatingState != ConnectionState.NONE && operatingState 
             != ConnectionState.DETACHED)
         {
             EnfluxVRSuit.detachPort();
         }
+
+        if (client != null)
+            client.Close();
 
         if (serverState != ServerState.CLOSED)
         {
@@ -207,7 +221,6 @@ public class EVRSuitManager : MonoBehaviour
             if (EnfluxVRSuit.disconnect(connectedDevices.Count) < 1)
             {
                 Debug.Log("Devices disconnected");
-                client.Close();
                 operatingState = ConnectionState.DISCONNECTED;
                 scanUpdater.StartScanning();
             }
