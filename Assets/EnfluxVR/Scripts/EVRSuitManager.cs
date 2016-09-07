@@ -65,10 +65,7 @@ public class EVRSuitManager : MonoBehaviour
     
     void Start()
     {
-        /**
-         * required so that when socket server launches, does not pause Unity
-         * will go away in future iterations
-         * */
+        // required so that when socket server launches, does not pause Unity
         Application.runInBackground = true;
         StartCoroutine(launchServer());
         orientationAngles = GameObject.Find("[EnfluxVRHumanoid]")
@@ -81,9 +78,9 @@ public class EVRSuitManager : MonoBehaviour
     {
         //Just in case some steps were skipped
         Debug.Log("Making sure things are closed down");
+
         // Make sure sensors are disconnected, port is detached,
         // and client connection closed
-
         if(operatingState != ConnectionState.NONE || 
             operatingState != ConnectionState.DETACHED || 
             operatingState != ConnectionState.DISCONNECTED)
@@ -106,11 +103,7 @@ public class EVRSuitManager : MonoBehaviour
             client.Close();
 
         if (serverState != ServerState.CLOSED)
-        {
-            //todo: message from server confirming client disconnect
-            //client.Close();
-            //todo: make this actually kill the process
-            //currently just returns and error
+        {   
             serverProcess.Kill();
         }
     }
@@ -144,10 +137,10 @@ public class EVRSuitManager : MonoBehaviour
         serverState = ServerState.STARTED;
     }
 
-    /**
+    /*
      * parse friendly name to find COM port 
      * pass COM port in to connect
-     * */
+     */
     public void attachPort(string friendlyName)
     {
         if(operatingState == ConnectionState.NONE || operatingState == ConnectionState.DETACHED)
