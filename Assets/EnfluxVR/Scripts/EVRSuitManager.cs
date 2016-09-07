@@ -29,6 +29,7 @@ public class EVRSuitManager : MonoBehaviour
     private System.Diagnostics.Process serverProcess;
     private IAddOrientationAngles orientationAngles;
     private ScanResultsUpdater scanUpdater;
+    private ManagedWorkerThread managedThread = new ManagedWorkerThread();
 
     private enum ConnectionState
     {
@@ -95,7 +96,8 @@ public class EVRSuitManager : MonoBehaviour
         if (operatingState != ConnectionState.NONE && operatingState 
             != ConnectionState.DETACHED)
         {
-            EnfluxVRSuit.detachPort(null);
+            StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+            EnfluxVRSuit.detachPort(returnBuffer);
         }
 
         if (client != null)
@@ -156,10 +158,10 @@ public class EVRSuitManager : MonoBehaviour
                 StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
 
                 if (EnfluxVRSuit.attachSelectedPort(comName, 
-                    returnBuffer,
-                    new AttachedPort()) < 1)
+                    returnBuffer) < 1)
                 {
                     operatingState = ConnectionState.ATTACHED;
+                    managedThread.startMwThread();
                     scanUpdater.StartScanning();
                 }
                 else
@@ -188,12 +190,12 @@ public class EVRSuitManager : MonoBehaviour
             }
         }
 
-        Debug.Log(devices.Count);
-
         if(operatingState == ConnectionState.ATTACHED || 
             operatingState == ConnectionState.DISCONNECTED)
         {
-            if (EnfluxVRSuit.connect(apiArg, devices.Count) < 1)
+            StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+
+            if (EnfluxVRSuit.connect(apiArg, devices.Count, returnBuffer) < 1)
             {
                 connectedDevices = devices;
                 operatingState = ConnectionState.CONNECTED;
@@ -202,7 +204,7 @@ public class EVRSuitManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Problem connecting");
+                Debug.Log(returnBuffer);
             }
         }else
         {
@@ -215,7 +217,10 @@ public class EVRSuitManager : MonoBehaviour
     {
         if(operatingState == ConnectionState.CONNECTED)
         {
-            if (EnfluxVRSuit.disconnect(connectedDevices.Count) < 1)
+
+            StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+
+            if (EnfluxVRSuit.disconnect(connectedDevices.Count, returnBuffer) < 1)
             {
                 Debug.Log("Devices disconnected");
                 operatingState = ConnectionState.DISCONNECTED;
@@ -223,7 +228,7 @@ public class EVRSuitManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Problem disconnecting");
+                Debug.Log(returnBuffer);
             }
         }else
         {
@@ -236,13 +241,15 @@ public class EVRSuitManager : MonoBehaviour
     {
         if(operatingState == ConnectionState.CONNECTED)
         {
-            if (EnfluxVRSuit.performCalibration(connectedDevices.Count) < 1)
+            StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+
+            if (EnfluxVRSuit.performCalibration(connectedDevices.Count, returnBuffer) < 1)
             {
                 operatingState = ConnectionState.CALIBRATING;
             }
             else
             {
-                Debug.Log("Problem running calibration");
+                Debug.Log(returnBuffer);
             }
         }else
         {
@@ -254,14 +261,16 @@ public class EVRSuitManager : MonoBehaviour
     public void finishCalibration()
     {
         if(operatingState == ConnectionState.CALIBRATING)
-        {            
-            if (EnfluxVRSuit.finishCalibration(connectedDevices.Count) < 1)
+        {
+            StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+
+            if (EnfluxVRSuit.finishCalibration(connectedDevices.Count, returnBuffer) < 1)
             {
                 operatingState = ConnectionState.CONNECTED;
             }
             else
             {
-                Debug.Log("Problem occured during calibration");
+                Debug.Log(returnBuffer);
             }
         }else
         {
@@ -275,14 +284,18 @@ public class EVRSuitManager : MonoBehaviour
         
         if (operatingState == ConnectionState.CONNECTED)
         {
-            if (EnfluxVRSuit.streamRealTime(connectedDevices.Count, record) < 1)
+            StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+
+            if (EnfluxVRSuit.streamRealTime(connectedDevices.Count, 
+                record, 
+                returnBuffer) < 1)
             {
                 operatingState = ConnectionState.STREAMING;
                 StartCoroutine(readAngles());
             }
             else
             {
-                Debug.Log("Error, no devices to animate");
+                Debug.Log(returnBuffer);
             }
         }else
         {
@@ -350,7 +363,9 @@ public class EVRSuitManager : MonoBehaviour
     {
         if(operatingState == ConnectionState.STREAMING)
         {
-            if (EnfluxVRSuit.stopRealTime(connectedDevices.Count) < 1)
+            StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+
+            if (EnfluxVRSuit.stopRealTime(connectedDevices.Count, returnBuffer) < 1)
             {
                 operatingState = ConnectionState.CONNECTED;
                 clearStream();
@@ -360,7 +375,7 @@ public class EVRSuitManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Problem occured while stopping stream");
+                Debug.Log(returnBuffer);
             }
         }
         else
@@ -400,6 +415,7 @@ public class EVRSuitManager : MonoBehaviour
             if (EnfluxVRSuit.detachPort(returnBuffer) < 1)
             {
                 operatingState = ConnectionState.DETACHED;
+                managedThread.stopMwThread();
                 scanUpdater.StopScanning();
                 Debug.Log(returnBuffer);
             }
@@ -414,30 +430,17 @@ public class EVRSuitManager : MonoBehaviour
                 + Enum.GetName(typeof(ConnectionState), operatingState));
         }
     }
-    
-    //private class ComPorts : EnfluxVRSuit.IFindPortCallback
-    //{
-    //    public List<string> _ports = new List<string>();
 
-    //    public void findportCallback(StringBuilder name)
+    //private class AttachedPort : EnfluxVRSuit.IOperationCallbacks
+    //{   
+    //    public void messageCallback(sysmsg msgresult)
     //    {
-    //        if (!_ports.Contains(name.ToString()) && name.ToString().Contains("Bluegiga"))
-    //        {
-    //            _ports.Add(name.ToString());
-    //        }
-    //    }       
+    //        Debug.Log(msgresult.msg);
+    //    }
+
+    //    public void scanCallback(scandata scanresult)
+    //    {
+    //        ThreadDispatch.instance.AddScanItem(scanresult);
+    //    } 
     //}
-
-    private class AttachedPort : EnfluxVRSuit.IOperationCallbacks
-    {   
-        public void messageCallback(sysmsg msgresult)
-        {
-            Debug.Log(msgresult.msg);
-        }
-
-        public void scanCallback(scandata scanresult)
-        {
-            ThreadDispatch.instance.AddScanItem(scanresult);
-        } 
-    }
 }
