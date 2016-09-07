@@ -16,7 +16,6 @@ using EnflxStructs;
 public class EVRSuitManager : MonoBehaviour
 {
     private ComPorts availablePorts;
-    private AttachedPort attachedPort;
     public List<string> ports { get { return availablePorts._ports; } }
     public List<string> connectedDevices;
     private ConnectionState operatingState = ConnectionState.NONE;
@@ -108,12 +107,12 @@ public class EVRSuitManager : MonoBehaviour
         }
     }
    
-    /**
+    /*
      * Uses coroutine in order to not block main thread
      * Launches Enflux Java socket server
      * The server processes the sensor data stream
      * and produces orientation angles
-     * */
+     */
     private IEnumerator launchServer()
     {
         serverProcess = new System.Diagnostics.Process();
@@ -138,26 +137,32 @@ public class EVRSuitManager : MonoBehaviour
     }
 
     /*
-     * parse friendly name to find COM port 
-     * pass COM port in to connect
+     * INPUT: Friendly name of COM port where dongle is located
+     * OUTPUT: None
+     * 
+     * SUMMARY: Checks for correct operational state, 
+     * gets COMX location from input, and attempts to 
+     * attach to the port
+     * 
+     * ATTACH SUCCEED: update operational state
+     * ATTACH FAIL: state unchanged, prints error message to debug log
+     * 
+     * RETURNS: NONE
      */
     public void attachPort(string friendlyName)
     {
         if(operatingState == ConnectionState.NONE || operatingState == ConnectionState.DETACHED)
         {
-            System.Text.RegularExpressions.Regex toComPort =
-            new System.Text.RegularExpressions.Regex(@".? \((COM\d+)\)$");
-            if (toComPort.IsMatch(friendlyName.ToString()))
-            {
-                StringBuilder comName = new StringBuilder()
-                    .Append(toComPort.Match(friendlyName.ToString()).Groups[1].Value);
-                Debug.Log(comName);
-                attachedPort = new AttachedPort();
-                if (EnfluxVRSuit.attachSelectedPort(comName, attachedPort) < 1)
+            StringBuilder comName = EnfluxUtils.parseFriendlyName(friendlyName);
+
+            if (comName != null)
+            {   
+                if (EnfluxVRSuit.attachSelectedPort(comName, new AttachedPort()) < 1)
                 {
                     operatingState = ConnectionState.ATTACHED;
                     scanUpdater.StartScanning();
-                }else
+                }
+                else
                 {
                     Debug.Log("Error while trying to attach to port: " + comName);
                 }

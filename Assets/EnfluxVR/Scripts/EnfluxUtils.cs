@@ -8,9 +8,8 @@ public static class EnfluxUtils {
      * SUMMARY: Compares string to REGEX to see if it
      * contains a pattern matching COMX. 
      * 
-     * Returns StringBuilder containing matching portion
+     * RETURNS: StringBuilder containing matching portion
      * of original string or null
-     * 
      */
     public static StringBuilder parseFriendlyName(string friendlyName)
     {
