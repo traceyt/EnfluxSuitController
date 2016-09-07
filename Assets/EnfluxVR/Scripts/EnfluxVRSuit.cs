@@ -10,23 +10,23 @@ using EnflxStructs;
 
 internal static class EnfluxVRSuit {
 
+    public static int MESSAGESIZE = 256;
     private const string dllName = "ModuleInterface";
     private delegate void ScanCallbackDel(scandata scanresult);
     private delegate void StreamCallbackDel(streamdata streamresult);
     private delegate void MessageCallbackDel(sysmsg msgresult);
-    private delegate void FindPortCallbackDel(StringBuilder buffer);
 
     private static class EVRSUIT_0_0_1
     {
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void startScanPorts(FindPortCallbackDel fcb);        
+        public static extern void scanPortNames(StringBuilder returnBuffer);        
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int attachPort(StringBuilder port, 
-            ScanCallbackDel scb, MessageCallbackDel mcb, StreamCallbackDel strmcb);
+        public static extern int attachPort(StringBuilder port, StringBuilder returnBuffer, 
+            ScanCallbackDel scb, MessageCallbackDel mcb);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int detachPort();
+        public static extern int detachPort(StringBuilder returnBuffer);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int connectDevices(StringBuilder devices, int numdevices);
@@ -77,38 +77,32 @@ internal static class EnfluxVRSuit {
         return EVRSUIT_0_0_1.stopRealTime(numdevices);
     }
 
-    public static void startScanPorts(IFindPortCallback fcb)
+    public static void startScanPorts(StringBuilder returnBuffer)
     {
         //gets any avaiable COM ports on PC
-        EVRSUIT_0_0_1.startScanPorts(new FindPortCallbackDel(fcb.findportCallback));
+        EVRSUIT_0_0_1.scanPortNames(returnBuffer);
     }    
 
-    public static int attachSelectedPort(StringBuilder port, IOperationCallbacks ocb)
+    public static int attachSelectedPort(StringBuilder port,
+        StringBuilder returnBuffer,
+        IOperationCallbacks ocb)
     {
         //attach to a selected COM port, if BlueGiga port then scans for BLE
-        return EVRSUIT_0_0_1.attachPort(port,
+        return EVRSUIT_0_0_1.attachPort(port, returnBuffer,
             new ScanCallbackDel(ocb.scanCallback),
-            new MessageCallbackDel(ocb.messageCallback),
-            new StreamCallbackDel(ocb.streamCallback));
+            new MessageCallbackDel(ocb.messageCallback));
     }
 
-    public static int detachPort()
+    public static int detachPort(StringBuilder returnBuffer)
     {
-        return EVRSUIT_0_0_1.detachPort();
-    }
-
-    public interface IFindPortCallback
-    {
-        void findportCallback(StringBuilder buffer);
+        return EVRSUIT_0_0_1.detachPort(returnBuffer);
     }
 
     //Callbacks to support device operations
     public interface IOperationCallbacks
     {
         //results from scanning such as address, name, and rssi
-        void scanCallback(scandata scanresult);
-        //streaming data
-        void streamCallback(streamdata streamresult);
+        void scanCallback(scandata scanresult);       
         //system messages such as state or errors
         void messageCallback(sysmsg msgresult);
     }

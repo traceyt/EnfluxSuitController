@@ -15,8 +15,8 @@ using EnflxStructs;
 
 public class EVRSuitManager : MonoBehaviour
 {
-    private ComPorts availablePorts;
-    public List<string> ports { get { return availablePorts._ports; } }
+    public List<string> ports { get { return _ports; } }
+    private List<string> _ports = new List<string>();
     public List<string> connectedDevices;
     private ConnectionState operatingState = ConnectionState.NONE;
     private ServerState serverState = ServerState.CLOSED;
@@ -54,16 +54,16 @@ public class EVRSuitManager : MonoBehaviour
         void setMode(int mode);
         string getMode();
     }
-    
-    void Awake()
-    {
-        //Get available COM ports
-        availablePorts = new ComPorts();
-        EnfluxVRSuit.startScanPorts(availablePorts);
-    } 
-    
+
     void Start()
     {
+        StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+        EnfluxVRSuit.startScanPorts(returnBuffer);
+        if(returnBuffer != null)
+        {
+            _ports.Add(returnBuffer.ToString());
+        }
+
         // required so that when socket server launches, does not pause Unity
         Application.runInBackground = true;
         StartCoroutine(launchServer());
@@ -95,7 +95,7 @@ public class EVRSuitManager : MonoBehaviour
         if (operatingState != ConnectionState.NONE && operatingState 
             != ConnectionState.DETACHED)
         {
-            EnfluxVRSuit.detachPort();
+            EnfluxVRSuit.detachPort(null);
         }
 
         if (client != null)
@@ -110,8 +110,6 @@ public class EVRSuitManager : MonoBehaviour
     /*
      * Uses coroutine in order to not block main thread
      * Launches Enflux Java socket server
-     * The server processes the sensor data stream
-     * and produces orientation angles
      */
     private IEnumerator launchServer()
     {
@@ -124,14 +122,12 @@ public class EVRSuitManager : MonoBehaviour
             Debug.Log("Socket server started");
         }
 
-        //todo: replace this with message from server
-        //confirming connection
+        //Delay in order to give the server time
+        //to launch
         yield return new WaitForSeconds(3);
         client = new TcpClient(host, port);
         stream = client.GetStream();
-        //todo: looking into doing this such that encoding is specified
         streamWriter = new StreamWriter(stream);
-        //todo: verify that this is correct encoding
         streamReader = new BinaryReader(stream, Encoding.UTF8);
         serverState = ServerState.STARTED;
     }
@@ -144,7 +140,7 @@ public class EVRSuitManager : MonoBehaviour
      * gets COMX location from input, and attempts to 
      * attach to the port
      * 
-     * ATTACH SUCCEED: update operational state
+     * ATTACH SUCCEED: update operational state, start processing scan results
      * ATTACH FAIL: state unchanged, prints error message to debug log
      * 
      * RETURNS: NONE
@@ -156,15 +152,19 @@ public class EVRSuitManager : MonoBehaviour
             StringBuilder comName = EnfluxUtils.parseFriendlyName(friendlyName);
 
             if (comName != null)
-            {   
-                if (EnfluxVRSuit.attachSelectedPort(comName, new AttachedPort()) < 1)
+            {
+                StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+
+                if (EnfluxVRSuit.attachSelectedPort(comName, 
+                    returnBuffer,
+                    new AttachedPort()) < 1)
                 {
                     operatingState = ConnectionState.ATTACHED;
                     scanUpdater.StartScanning();
                 }
                 else
                 {
-                    Debug.Log("Error while trying to attach to port: " + comName);
+                    Debug.Log(returnBuffer);
                 }
             }
         }else
@@ -378,41 +378,56 @@ public class EVRSuitManager : MonoBehaviour
         }
     }
 
+    /*
+     * INPUT: None
+     * OUTPUT: None
+     * 
+     * SUMMARY: Checks for correct operational state, then attempts 
+     * to detach from COM port
+     * 
+     * ATTACH SUCCEED: update operational state, stop scanning for devices
+     * ATTACH FAIL: state unchanged, prints error message to debug log
+     * 
+     * RETURNS: NONE
+     */
     public void detachPort()
     {
-        if(operatingState == ConnectionState.ATTACHED ||  operatingState == ConnectionState.DISCONNECTED)
+        StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+
+        if(operatingState == ConnectionState.ATTACHED ||  
+            operatingState == ConnectionState.DISCONNECTED)
         {
-            if (EnfluxVRSuit.detachPort() < 1)
+            if (EnfluxVRSuit.detachPort(returnBuffer) < 1)
             {
                 operatingState = ConnectionState.DETACHED;
                 scanUpdater.StopScanning();
+                Debug.Log(returnBuffer);
             }
             else
             {                
-                Debug.Log("Error occured while detaching");
+                Debug.Log(returnBuffer);
             }
-        }else
+        }
+        else
         {
             Debug.Log("Unable to detach from port, program is in wrong state "
                 + Enum.GetName(typeof(ConnectionState), operatingState));
         }
-    }   
-
-    //called on thread created by native dll
-    private class ComPorts : EnfluxVRSuit.IFindPortCallback
-    {
-        public List<string> _ports = new List<string>();
-
-        public void findportCallback(StringBuilder name)
-        {
-            if (!_ports.Contains(name.ToString()) && name.ToString().Contains("Bluegiga"))
-            {
-                _ports.Add(name.ToString());
-            }
-        }       
     }
+    
+    //private class ComPorts : EnfluxVRSuit.IFindPortCallback
+    //{
+    //    public List<string> _ports = new List<string>();
 
-    //called on thread created by native dll
+    //    public void findportCallback(StringBuilder name)
+    //    {
+    //        if (!_ports.Contains(name.ToString()) && name.ToString().Contains("Bluegiga"))
+    //        {
+    //            _ports.Add(name.ToString());
+    //        }
+    //    }       
+    //}
+
     private class AttachedPort : EnfluxVRSuit.IOperationCallbacks
     {   
         public void messageCallback(sysmsg msgresult)
@@ -423,11 +438,6 @@ public class EVRSuitManager : MonoBehaviour
         public void scanCallback(scandata scanresult)
         {
             ThreadDispatch.instance.AddScanItem(scanresult);
-        }        
-
-        public void streamCallback(streamdata streamresult)
-        {
-            Debug.Log(streamresult.data);
-        }
+        } 
     }
 }
