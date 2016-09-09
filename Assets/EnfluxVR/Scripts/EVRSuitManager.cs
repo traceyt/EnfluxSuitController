@@ -156,12 +156,12 @@ public class EVRSuitManager : MonoBehaviour
             if (comName != null)
             {
                 StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+                managedThread.startMwThread();
 
                 if (EnfluxVRSuit.attachSelectedPort(comName, 
                     returnBuffer) < 1)
                 {
-                    operatingState = ConnectionState.ATTACHED;
-                    managedThread.startMwThread();
+                    operatingState = ConnectionState.ATTACHED;                    
                     scanUpdater.StartScanning();
                 }
                 else
@@ -197,6 +197,7 @@ public class EVRSuitManager : MonoBehaviour
 
             if (EnfluxVRSuit.connect(apiArg, devices.Count, returnBuffer) < 1)
             {
+                managedThread.stopMwThread();
                 connectedDevices = devices;
                 operatingState = ConnectionState.CONNECTED;
                 scanUpdater.StopScanning();
@@ -222,6 +223,7 @@ public class EVRSuitManager : MonoBehaviour
 
             if (EnfluxVRSuit.disconnect(connectedDevices.Count, returnBuffer) < 1)
             {
+                managedThread.stopMwThread();
                 Debug.Log("Devices disconnected");
                 operatingState = ConnectionState.DISCONNECTED;
                 scanUpdater.StartScanning();
@@ -241,7 +243,7 @@ public class EVRSuitManager : MonoBehaviour
     {
         if(operatingState == ConnectionState.CONNECTED)
         {
-            StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+            StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);          
 
             if (EnfluxVRSuit.performCalibration(connectedDevices.Count, returnBuffer) < 1)
             {
@@ -415,9 +417,9 @@ public class EVRSuitManager : MonoBehaviour
             if (EnfluxVRSuit.detachPort(returnBuffer) < 1)
             {
                 operatingState = ConnectionState.DETACHED;
-                managedThread.stopMwThread();
                 scanUpdater.StopScanning();
                 Debug.Log(returnBuffer);
+                managedThread.stopMwThread();
             }
             else
             {                

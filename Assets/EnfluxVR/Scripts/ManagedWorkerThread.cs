@@ -40,7 +40,7 @@ public class ManagedWorkerThread {
             Thread.Sleep(20);
         }
 
-        EnfluxVRSuit.unregisterResponseCallbacks();
+    //    EnfluxVRSuit.unregisterResponseCallbacks();
     }
 
     private class AttachedPort : EnfluxVRSuit.IOperationCallbacks

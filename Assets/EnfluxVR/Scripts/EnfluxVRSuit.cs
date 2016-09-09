@@ -64,7 +64,7 @@ internal static class EnfluxVRSuit {
     {
         EVRSUIT_0_0_1.registerResponseCallbacks(new ScanCallbackDel(ocb.scanCallback),
             new MessageCallbackDel(ocb.messageCallback),
-            ocb.streamCallback);
+            new StreamCallbackDel(ocb.streamCallback));
     }
 
     public static void unregisterResponseCallbacks()
