@@ -78,3 +78,4 @@ modulesDB/
 *.log
 
 Assets/StreamingAssets/PoseRecordings
+Assets/StreamingAssets/PoseRecordings.meta
