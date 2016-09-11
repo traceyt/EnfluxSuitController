@@ -77,4 +77,4 @@ Thumbs.db
 modulesDB/
 *.log
 
-/StreamingAssets/PoseRecordings
+Assets/StreamingAssets/PoseRecordings
