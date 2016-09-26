@@ -29,7 +29,7 @@ public class EVRSuitManager : MonoBehaviour
     private System.Diagnostics.Process serverProcess;
     private IAddOrientationAngles orientationAngles;
     private ScanResultsUpdater scanUpdater;
-    private ManagedWorkerThread managedThread = new ManagedWorkerThread();
+    private CallbackQueue callbacks = new CallbackQueue();
 
     private enum ConnectionState
     {
@@ -59,7 +59,7 @@ public class EVRSuitManager : MonoBehaviour
     void Start()
     {
         StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
-        EnfluxVRSuit.startScanPorts(returnBuffer);
+        EnfluxVRSuit.scanPortNames(returnBuffer);
         if(returnBuffer != null)
         {
             _ports.Add(returnBuffer.ToString());
@@ -121,7 +121,7 @@ public class EVRSuitManager : MonoBehaviour
         serverProcess.StartInfo.FileName = filePath;
         if (serverProcess.Start())
         {
-            Debug.Log("Socket server started");
+           Debug.Log("Socket server started");
         }
 
         //Delay in order to give the server time
@@ -156,11 +156,11 @@ public class EVRSuitManager : MonoBehaviour
             if (comName != null)
             {
                 StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
-                managedThread.startMwThread();
 
                 if (EnfluxVRSuit.attachSelectedPort(comName, 
                     returnBuffer) < 1)
                 {
+                    EnfluxVRSuit.registerResponseCallbacks(callbacks);
                     operatingState = ConnectionState.ATTACHED;                    
                     scanUpdater.StartScanning();
                 }
@@ -197,10 +197,9 @@ public class EVRSuitManager : MonoBehaviour
 
             if (EnfluxVRSuit.connect(apiArg, devices.Count, returnBuffer) < 1)
             {
-                managedThread.stopMwThread();
                 connectedDevices = devices;
                 operatingState = ConnectionState.CONNECTED;
-                scanUpdater.StopScanning();
+                //scanUpdater.StopScanning();
                 Debug.Log("Devices connected");
             }
             else
@@ -223,10 +222,9 @@ public class EVRSuitManager : MonoBehaviour
 
             if (EnfluxVRSuit.disconnect(connectedDevices.Count, returnBuffer) < 1)
             {
-                managedThread.stopMwThread();
                 Debug.Log("Devices disconnected");
                 operatingState = ConnectionState.DISCONNECTED;
-                scanUpdater.StartScanning();
+                //scanUpdater.StartScanning();
             }
             else
             {
@@ -417,9 +415,9 @@ public class EVRSuitManager : MonoBehaviour
             if (EnfluxVRSuit.detachPort(returnBuffer) < 1)
             {
                 operatingState = ConnectionState.DETACHED;
-                scanUpdater.StopScanning();
                 Debug.Log(returnBuffer);
-                managedThread.stopMwThread();
+                EnfluxVRSuit.unregisterResponseCallbacks();
+                scanUpdater.StopScanning();
             }
             else
             {                

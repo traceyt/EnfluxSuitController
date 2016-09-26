@@ -7,12 +7,12 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using EnflxStructs;
 
 public class ScanResultsUpdater : MonoBehaviour {
 
     private state status;
     private IScanUpdate updateView;
-    private Dictionary<string, BleDevice> scannedDevices = new Dictionary<string, BleDevice>();
         
     private enum state
     {
@@ -23,12 +23,11 @@ public class ScanResultsUpdater : MonoBehaviour {
     // Use this for initialization
     void Start () {
         status = state.state_notupdating;
-        scannedDevices = ThreadDispatch.instance.GetScanItems();
+        //scannedDevices = ThreadDispatch.instance.GetScanItems();
     }
 	
 	// Update is called once per frame
 	void Update () {
-       
     }
 
     public void StartScanning()
@@ -45,15 +44,21 @@ public class ScanResultsUpdater : MonoBehaviour {
     {
         while (true)
         {
-            yield return null;
-            if (scannedDevices != null)
+            scandata nextscan;
+            while (CallbackQueue.ScanQueue.TryDequeue(out nextscan))
             {
-                foreach (var pair in scannedDevices)
+                if (nextscan.name == "Enfl")
                 {
-                    updateView.postUpdate(pair.Value);
+                    updateView.postUpdate(new BleDevice(nextscan));
                 }
+                Debug.Log(nextscan.addr);
             }
-            scannedDevices = ThreadDispatch.instance.GetScanItems();
+            statusreport nextStatus;
+            while (CallbackQueue.StatusQueue.TryDequeue(out nextStatus))
+            {
+                updateView.postUpdate(new ConnectedDevice(nextStatus));
+            }
+            yield return null;
         }
     }
 

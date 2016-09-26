@@ -15,119 +15,117 @@ internal static class EnfluxVRSuit {
     private delegate void ScanCallbackDel(scandata scanresult);
     private delegate void StreamCallbackDel(streamdata streamresult);
     private delegate void MessageCallbackDel(sysmsg msgresult);
+    private delegate void StatusCallbackDel(statusreport statusresult);
 
-    private static class EVRSUIT_0_0_1
+    private static class EVRSUIT_0_0_2
     {
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void scanPortNames(StringBuilder returnBuffer);        
-
-        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int attachPort(StringBuilder port, StringBuilder returnBuffer);
+        public static extern int attachPort(StringBuilder port);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int registerResponseCallbacks(ScanCallbackDel scb, 
-            MessageCallbackDel mcb, StreamCallbackDel strcb);
+            MessageCallbackDel mcb, StreamCallbackDel strcb, StatusCallbackDel srcb);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int unregisterResponseCallbacks();
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int detachPort(StringBuilder returnBuffer);
+        public static extern int detachPort();
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int connectDevices(StringBuilder devices,
-            int numdevices,
-            StringBuilder returnBuffer);
+            int numdevices);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int disconnectDevices(int numdevices, StringBuilder returnBuffer);
+        public static extern int disconnectDevices(int numdevices);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int performCalibration(int numdevices, StringBuilder returnBuffer);
+        public static extern int performCalibration(int numdevices);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int finishCalibration(int numdevices, StringBuilder returnBuffer);
+        public static extern int finishCalibration(int numdevices);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int streamRealTime(int numdevices, 
-            bool record, 
-            StringBuilder returnBuffer);
+            bool record);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int stopRealTime(int numdevices, StringBuilder returnBuffer);
+        public static extern int stopRealTime(int numdevices);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void getResponses();
+        public static extern void scanPortNames(StringBuilder portNames);
     }
 
     public static void registerResponseCallbacks(IOperationCallbacks ocb)
     {
-        EVRSUIT_0_0_1.registerResponseCallbacks(new ScanCallbackDel(ocb.scanCallback),
+        EVRSUIT_0_0_2.registerResponseCallbacks(new ScanCallbackDel(ocb.scanCallback),
             new MessageCallbackDel(ocb.messageCallback),
-            new StreamCallbackDel(ocb.streamCallback));
+            new StreamCallbackDel(ocb.streamCallback),
+            new StatusCallbackDel(ocb.statusCallback));
     }
 
     public static void unregisterResponseCallbacks()
     {
-        EVRSUIT_0_0_1.unregisterResponseCallbacks();
+        EVRSUIT_0_0_2.unregisterResponseCallbacks();
     }
 
-    public static void getResponses()
-    {
-        EVRSUIT_0_0_1.getResponses();
-    }
+    //public static void getResponses()
+    //{
+    //    EVRSUIT_0_0_2.getResponses();
+    //}
 
     public static int connect(StringBuilder devices, int numdevices, StringBuilder returnBuffer)
     {   
-        return EVRSUIT_0_0_1.connectDevices(devices, numdevices, returnBuffer);
+        return EVRSUIT_0_0_2.connectDevices(devices, numdevices);
     }
 
     public static int disconnect(int numdevices, StringBuilder returnBuffer)
     {
-        return EVRSUIT_0_0_1.disconnectDevices(numdevices, returnBuffer);
+        return EVRSUIT_0_0_2.disconnectDevices(numdevices);
     }
 
     public static int performCalibration(int numdevices, StringBuilder returnBuffer)
     {
-        return EVRSUIT_0_0_1.performCalibration(numdevices, returnBuffer);
+        return EVRSUIT_0_0_2.performCalibration(numdevices);
     }
 
     public static int finishCalibration(int numdevices, StringBuilder returnBuffer)
     {
-        return EVRSUIT_0_0_1.finishCalibration(numdevices, returnBuffer);
+        return EVRSUIT_0_0_2.finishCalibration(numdevices);
     }
 
     public static int streamRealTime(int numdevices, bool record, StringBuilder returnBuffer)
     {
-        return EVRSUIT_0_0_1.streamRealTime(numdevices, record, returnBuffer);
+        return EVRSUIT_0_0_2.streamRealTime(numdevices, record);
     }
 
     public static int stopRealTime(int numdevices, StringBuilder returnBuffer)
     {
-        return EVRSUIT_0_0_1.stopRealTime(numdevices, returnBuffer);
+        return EVRSUIT_0_0_2.stopRealTime(numdevices);
     }
 
-    public static void startScanPorts(StringBuilder returnBuffer)
+    public static void scanPortNames(StringBuilder ports)
     {
-        //gets any avaiable COM ports on PC
-        EVRSUIT_0_0_1.scanPortNames(returnBuffer);
-    }    
+        EVRSUIT_0_0_2.scanPortNames(ports);
+    }
 
     public static int attachSelectedPort(StringBuilder port,
         StringBuilder returnBuffer)
     {
         //attach to a selected COM port, if BlueGiga port then scans for BLE
-        return EVRSUIT_0_0_1.attachPort(port, returnBuffer);
+        return EVRSUIT_0_0_2.attachPort(port);
     }
 
     public static int detachPort(StringBuilder returnBuffer)
     {
-        return EVRSUIT_0_0_1.detachPort(returnBuffer);
+        return EVRSUIT_0_0_2.detachPort();
     }
 
     //Callbacks to support device operations
     public interface IOperationCallbacks
     {
+        void statusCallback(statusreport report);
+
         //results from scanning such as address, name, and rssi
         void scanCallback(scandata scanresult);
         //streaming data

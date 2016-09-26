@@ -27,5 +27,12 @@ namespace EnflxStructs
     {
         public string data;
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct statusreport
+    {
+        public int deviceHandle;
+        public int deviceState;
+    }
 }
 
