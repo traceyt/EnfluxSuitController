@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class ThreadDispatch : IDispatcher
 {
-    private Dictionary<string, BleDevice> scanResults = new Dictionary<string, BleDevice>();    
+    private Dictionary<string, BleDevice> scanResults = new Dictionary<string, BleDevice>();
     private static ThreadDispatch _instance;    
     private string deviceName = "Enfl";    
 
@@ -46,7 +46,7 @@ public class ThreadDispatch : IDispatcher
                 else
                 {
                     scanResults.Add(item.addr,
-                        new BleDevice(item.addr, item.rssi, item.name));                    
+                        new BleDevice(item.addr, item.rssi, item.name));                  
                 }
             }
         }

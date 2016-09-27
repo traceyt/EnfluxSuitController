@@ -8,12 +8,15 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using EnflxStructs;
+using System.Text;
 
 public class ScanResultsUpdater : MonoBehaviour {
 
     private state status;
     private IScanUpdate updateView;
-        
+
+    public Dictionary<int, string> connectedDeviceMac = new Dictionary<int, string>();
+
     private enum state
     {
         state_updating,
@@ -23,11 +26,10 @@ public class ScanResultsUpdater : MonoBehaviour {
     // Use this for initialization
     void Start () {
         status = state.state_notupdating;
-        //scannedDevices = ThreadDispatch.instance.GetScanItems();
     }
-	
-	// Update is called once per frame
-	void Update () {
+    
+    // Update is called once per frame
+    void Update () {
     }
 
     public void StartScanning()
@@ -47,16 +49,30 @@ public class ScanResultsUpdater : MonoBehaviour {
             scandata nextscan;
             while (CallbackQueue.ScanQueue.TryDequeue(out nextscan))
             {
-                if (nextscan.name == "Enfl")
-                {
-                    updateView.postUpdate(new BleDevice(nextscan));
-                }
-                Debug.Log(nextscan.addr);
+                updateView.postUpdate(new BleDevice(nextscan));
             }
             statusreport nextStatus;
             while (CallbackQueue.StatusQueue.TryDequeue(out nextStatus))
             {
-                updateView.postUpdate(new ConnectedDevice(nextStatus));
+                if(nextStatus.deviceState == (int)ConnectedDevice.state.interval_changing &&
+                    !connectedDeviceMac.ContainsKey(nextStatus.deviceHandle))
+                {
+                    StringBuilder mac = new StringBuilder();
+                    int bleDevice;
+                    EnfluxVRSuit.getDeviceStatus(nextStatus.deviceHandle, mac, out bleDevice);
+                    connectedDeviceMac.Add(nextStatus.deviceHandle, mac.ToString());
+
+                }
+                if (connectedDeviceMac.ContainsKey(nextStatus.deviceHandle))
+                {
+                    updateView.postUpdate(new ConnectedDevice(
+                        nextStatus, connectedDeviceMac[nextStatus.deviceHandle]));
+
+                }
+                else
+                {
+                    updateView.postUpdate(new ConnectedDevice(nextStatus));
+                }
             }
             yield return null;
         }
@@ -69,6 +85,6 @@ public class ScanResultsUpdater : MonoBehaviour {
 
     public interface IScanUpdate
     {
-        void postUpdate(BleDevice device);
+        void postUpdate(SensorDevice device);
     }
 }

@@ -6,8 +6,64 @@
 
 using EnflxStructs;
 using System.Collections.Generic;
+using System;
 
-public class BleDevice
+public abstract class SensorDevice
+{
+    public abstract bool isActive();
+
+    public abstract string ID { get; }
+}
+
+public class BleDevice : SensorDevice
+{ 
+    public string name;
+    public string rssi;
+    public string mac;
+
+    public float lastUpdate;
+
+    public override bool isActive()
+    {
+        return (
+            name == "Enfl" &&
+            UnityEngine.Time.time - lastUpdate < 3);
+    }
+
+    public override string ID
+    {
+        get
+        {
+            return mac;
+        }
+    }
+
+    public BleDevice(string _mac, string _rssi, string _name)
+    {
+        mac = mac.ToUpper();        
+        rssi = _rssi;
+        name = _name;
+    }
+
+    public override string ToString()
+    {
+        return "  " + ID + "    " + name + "    " + rssi;
+    }
+
+    public BleDevice(scandata scan)
+    {
+        name = scan.name;
+        rssi = scan.rssi;
+        mac = scan.addr;
+        lastUpdate = UnityEngine.Time.time;
+    }
+    public BleDevice()
+    {
+
+    }
+}
+
+public class ConnectedDevice : SensorDevice
 {
     public enum state
     {
@@ -43,68 +99,59 @@ public class BleDevice
 
     public static Dictionary<state, string> stateString = new Dictionary<state, string>()
     {
-        { state.disconnected, "disconnected"},
-        { state.idle, "idle" },
-        { state.connecting, "connecting" },
-        { state.disconnecting, "disconnecting" },
-        { state.interval_changing, "interval_changing" },
-        { state.starting_stream, "starting_stream" },
-        { state.streaming, "streaming" },
-        { state.ending_stream, "ending_stream" },
-        { state.interval_request, "interval_request" },
-        { state.error_connecting, "error_connecting" },
-        { state.error_disconnecting, "error_disconnecting" },
-        { state.error_streaming, "error_streaming" },
-        { state.error_interval_change, "error_interval_change" },
-        { state.error_interval_request, "error_interval_request" }
+        { state.disconnected, "Disconnected"},
+        { state.idle, "Idle" },
+        { state.connecting, "Connecting" },
+        { state.disconnecting, "Disconnecting" },
+        { state.interval_changing, "Interval_changing" },
+        { state.starting_stream, "Starting_stream" },
+        { state.streaming, "Streaming" },
+        { state.ending_stream, "Ending stream" },
+        { state.interval_request, "Interval request" },
+        { state.error_connecting, "Error connecting" },
+        { state.error_disconnecting, "Error disconnecting" },
+        { state.error_streaming, "Error streaming" },
+        { state.error_interval_change, "Error interval change" },
+        { state.error_interval_request, "Error interval request" }
 
     };
-    private string _name;
-    public string name
-    {   set { _name = value;}
-        get { return _name;}
-    }
-    private string _rssi;
-    public string rssi
-    {   set { _rssi = value; }
-        get { return _rssi;  }
-    }
-    private string _mac;
-    public string mac
-    {   set { _mac = value.ToUpper();}
-        get { return _mac; }
+
+    state status;
+    int devHandle;
+    public string mac = "";
+    private string v;
+
+    public override bool isActive()
+    {
+        return status != state.disconnected;
     }
 
-    public BleDevice(string mac, string rssi, string name)
+    public ConnectedDevice(statusreport report)
     {
-        _mac = mac.ToUpper();        
-        _rssi = rssi;
-        _name = name;
+        status = (state)report.deviceState;
+        // Can be replaced by call to GetDeviceInfo
+        mac = "";
+        devHandle = report.deviceHandle;
+    }
+
+    public ConnectedDevice(statusreport report, string _mac) : this(report)
+    {
+        mac = _mac;
+    }
+
+    public override string ID
+    {
+        get { return devHandle.ToString(); }
+    }
+
+    public string getName()
+    {
+        if (mac == "") return "Device " + devHandle.ToString();
+        else return mac;
     }
 
     public override string ToString()
     {
-        return "  " + _mac + "    " + _name + "    " + _rssi;
-    }
-
-    public BleDevice(scandata scan)
-    {
-        name = scan.name;
-        rssi = scan.rssi;
-        mac = scan.addr;
-    }
-    public BleDevice()
-    {
-
-    }
-}
-
-public class ConnectedDevice : BleDevice
-{
-    public ConnectedDevice(statusreport report)
-    {
-        name = stateString[(state)report.deviceState];
-        rssi = "";
-        mac = "Device" + report.deviceHandle;
+        return "  " + getName() + "    " + stateString[status];
     }
 }

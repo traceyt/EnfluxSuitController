@@ -72,6 +72,7 @@ public class EVRSuitManager : MonoBehaviour
             .GetComponent<EVRHumanoidLimbMap>();
 
         scanUpdater = GameObject.Find("ScanResultsUpdater").GetComponent<ScanResultsUpdater>();
+        EnfluxVRSuit.registerResponseCallbacks(callbacks);
     }
 
     void OnApplicationQuit()
@@ -81,8 +82,8 @@ public class EVRSuitManager : MonoBehaviour
 
         // Make sure sensors are disconnected, port is detached,
         // and client connection closed
-        if(operatingState != ConnectionState.NONE || 
-            operatingState != ConnectionState.DETACHED || 
+        if(operatingState != ConnectionState.NONE ||
+            operatingState != ConnectionState.DETACHED ||
             operatingState != ConnectionState.DISCONNECTED)
         {
             if(operatingState == ConnectionState.STREAMING)
@@ -93,7 +94,7 @@ public class EVRSuitManager : MonoBehaviour
             disconnectEnflux();
         }
 
-        if (operatingState != ConnectionState.NONE && operatingState 
+        if (operatingState != ConnectionState.NONE && operatingState
             != ConnectionState.DETACHED)
         {
             StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
@@ -104,11 +105,13 @@ public class EVRSuitManager : MonoBehaviour
             client.Close();
 
         if (serverState != ServerState.CLOSED)
-        {   
+        {
             serverProcess.Kill();
         }
+        EnfluxVRSuit.unregisterResponseCallbacks();
+
     }
-   
+
     /*
      * Uses coroutine in order to not block main thread
      * Launches Enflux Java socket server
@@ -116,12 +119,13 @@ public class EVRSuitManager : MonoBehaviour
     private IEnumerator launchServer()
     {
         serverProcess = new System.Diagnostics.Process();
-        string filePath = Path.Combine(Application.streamingAssetsPath + "/Sensors/", 
+        string filePath = Path.Combine(Application.streamingAssetsPath + "/Sensors/",
             "EVRModuleServer.jar");
         serverProcess.StartInfo.FileName = filePath;
+
         if (serverProcess.Start())
         {
-           Debug.Log("Socket server started");
+          Debug.Log("Socket server started");
         }
 
         //Delay in order to give the server time
@@ -137,14 +141,14 @@ public class EVRSuitManager : MonoBehaviour
     /*
      * INPUT: Friendly name of COM port where dongle is located
      * OUTPUT: None
-     * 
-     * SUMMARY: Checks for correct operational state, 
-     * gets COMX location from input, and attempts to 
+     *
+     * SUMMARY: Checks for correct operational state,
+     * gets COMX location from input, and attempts to
      * attach to the port
-     * 
+     *
      * ATTACH SUCCEED: update operational state, start processing scan results
      * ATTACH FAIL: state unchanged, prints error message to debug log
-     * 
+     *
      * RETURNS: NONE
      */
     public void attachPort(string friendlyName)
@@ -157,11 +161,10 @@ public class EVRSuitManager : MonoBehaviour
             {
                 StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
 
-                if (EnfluxVRSuit.attachSelectedPort(comName, 
+                if (EnfluxVRSuit.attachSelectedPort(comName,
                     returnBuffer) < 1)
                 {
-                    EnfluxVRSuit.registerResponseCallbacks(callbacks);
-                    operatingState = ConnectionState.ATTACHED;                    
+                    operatingState = ConnectionState.ATTACHED;
                     scanUpdater.StartScanning();
                 }
                 else
@@ -171,7 +174,7 @@ public class EVRSuitManager : MonoBehaviour
             }
         }else
         {
-            Debug.Log("Unable to attach, program is in wrong state "  
+            Debug.Log("Unable to attach, program is in wrong state "
                 + Enum.GetName(typeof(ConnectionState), operatingState));
         }
     }
@@ -190,7 +193,7 @@ public class EVRSuitManager : MonoBehaviour
             }
         }
 
-        if(operatingState == ConnectionState.ATTACHED || 
+        if(operatingState == ConnectionState.ATTACHED ||
             operatingState == ConnectionState.DISCONNECTED)
         {
             StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
@@ -200,7 +203,7 @@ public class EVRSuitManager : MonoBehaviour
                 connectedDevices = devices;
                 operatingState = ConnectionState.CONNECTED;
                 //scanUpdater.StopScanning();
-                Debug.Log("Devices connected");
+                Debug.Log("Devices connecting");
             }
             else
             {
@@ -222,7 +225,7 @@ public class EVRSuitManager : MonoBehaviour
 
             if (EnfluxVRSuit.disconnect(connectedDevices.Count, returnBuffer) < 1)
             {
-                Debug.Log("Devices disconnected");
+                Debug.Log("Devices disconnecting");
                 operatingState = ConnectionState.DISCONNECTED;
                 //scanUpdater.StartScanning();
             }
@@ -241,7 +244,7 @@ public class EVRSuitManager : MonoBehaviour
     {
         if(operatingState == ConnectionState.CONNECTED)
         {
-            StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);          
+            StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
 
             if (EnfluxVRSuit.performCalibration(connectedDevices.Count, returnBuffer) < 1)
             {
@@ -281,13 +284,13 @@ public class EVRSuitManager : MonoBehaviour
 
     public void enableAnimate(bool record)
     {
-        
+
         if (operatingState == ConnectionState.CONNECTED)
         {
             StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
 
-            if (EnfluxVRSuit.streamRealTime(connectedDevices.Count, 
-                record, 
+            if (EnfluxVRSuit.streamRealTime(connectedDevices.Count,
+                record,
                 returnBuffer) < 1)
             {
                 operatingState = ConnectionState.STREAMING;
@@ -300,7 +303,7 @@ public class EVRSuitManager : MonoBehaviour
         }else
         {
             Debug.Log("Unable to stream, program is in wrong state "
-                + Enum.GetName(typeof(ConnectionState), operatingState));            
+                + Enum.GetName(typeof(ConnectionState), operatingState));
         }
     }
 
@@ -318,14 +321,14 @@ public class EVRSuitManager : MonoBehaviour
         }
 
         //tell server to send data
-        streamWriter.WriteLine(orientationAngles.getMode());       
+        streamWriter.WriteLine(orientationAngles.getMode());
         streamWriter.Flush();
-        int formattedAnglesLength = 20;        
+        int formattedAnglesLength = 20;
 
         while (operatingState == ConnectionState.STREAMING)
         {
-            //todo: this is a waste of an operation, but 
-            //server expects a string 
+            //todo: this is a waste of an operation, but
+            //server expects a string
             streamWriter.WriteLine("send");
             streamWriter.Flush();
             int multiplier = connectedDevices.Count;
@@ -344,19 +347,19 @@ public class EVRSuitManager : MonoBehaviour
             yield return null;
         }
     }
-    
+
     private int setAnimationMode()
     {
-        //read and set mode        
+        //read and set mode
         streamWriter.WriteLine("requestmode");
         streamWriter.Flush();
         int mode = 0;
         for(int i = 0; i < 2; i++)
-        {            
+        {
             mode = streamReader.Read();
         }
         orientationAngles.setMode(mode);
-        return 0;    
+        return 0;
     }
 
     public void disableAnimate()
@@ -389,38 +392,37 @@ public class EVRSuitManager : MonoBehaviour
     {
         while (stream.DataAvailable)
         {
-            System.Net.IPAddress.NetworkToHostOrder(streamReader.ReadInt64()); 
+            System.Net.IPAddress.NetworkToHostOrder(streamReader.ReadInt64());
         }
     }
 
     /*
      * INPUT: None
      * OUTPUT: None
-     * 
-     * SUMMARY: Checks for correct operational state, then attempts 
+     *
+     * SUMMARY: Checks for correct operational state, then attempts
      * to detach from COM port
-     * 
+     *
      * ATTACH SUCCEED: update operational state, stop scanning for devices
      * ATTACH FAIL: state unchanged, prints error message to debug log
-     * 
+     *
      * RETURNS: NONE
      */
     public void detachPort()
     {
         StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
 
-        if(operatingState == ConnectionState.ATTACHED ||  
+        if(operatingState == ConnectionState.ATTACHED ||
             operatingState == ConnectionState.DISCONNECTED)
         {
             if (EnfluxVRSuit.detachPort(returnBuffer) < 1)
             {
                 operatingState = ConnectionState.DETACHED;
                 Debug.Log(returnBuffer);
-                EnfluxVRSuit.unregisterResponseCallbacks();
                 scanUpdater.StopScanning();
             }
             else
-            {                
+            {
                 Debug.Log(returnBuffer);
             }
         }
@@ -430,17 +432,4 @@ public class EVRSuitManager : MonoBehaviour
                 + Enum.GetName(typeof(ConnectionState), operatingState));
         }
     }
-
-    //private class AttachedPort : EnfluxVRSuit.IOperationCallbacks
-    //{   
-    //    public void messageCallback(sysmsg msgresult)
-    //    {
-    //        Debug.Log(msgresult.msg);
-    //    }
-
-    //    public void scanCallback(scandata scanresult)
-    //    {
-    //        ThreadDispatch.instance.AddScanItem(scanresult);
-    //    } 
-    //}
 }

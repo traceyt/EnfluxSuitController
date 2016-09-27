@@ -54,6 +54,9 @@ internal static class EnfluxVRSuit {
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void scanPortNames(StringBuilder portNames);
+        
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int getDeviceStatus(int DeviceNum, StringBuilder outAddress, ref int outBleDevice);
     }
 
     public static void registerResponseCallbacks(IOperationCallbacks ocb)
@@ -68,11 +71,6 @@ internal static class EnfluxVRSuit {
     {
         EVRSUIT_0_0_2.unregisterResponseCallbacks();
     }
-
-    //public static void getResponses()
-    //{
-    //    EVRSUIT_0_0_2.getResponses();
-    //}
 
     public static int connect(StringBuilder devices, int numdevices, StringBuilder returnBuffer)
     {   
@@ -119,6 +117,12 @@ internal static class EnfluxVRSuit {
     public static int detachPort(StringBuilder returnBuffer)
     {
         return EVRSUIT_0_0_2.detachPort();
+    }
+
+    public static int getDeviceStatus(int DeviceNum, StringBuilder outAddress, out int bleDevice)
+    {
+        bleDevice = 0;
+        return EVRSUIT_0_0_2.getDeviceStatus(DeviceNum, outAddress, ref bleDevice);
     }
 
     //Callbacks to support device operations

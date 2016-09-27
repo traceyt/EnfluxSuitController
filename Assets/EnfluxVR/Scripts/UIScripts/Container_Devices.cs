@@ -24,9 +24,11 @@ public class Container_Devices : MonoBehaviour, ScanResultsUpdater.IScanUpdate {
     private RectTransform containerTransform;
     private RectTransform scrollTransform;
     private Dictionary<string, GameObject> displayedDevices = new Dictionary<string, GameObject>();
+    private Dictionary<string, SensorDevice> mostRecentUpdates = new Dictionary<string, SensorDevice>();
 
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start () {
 
         _manager = GameObject.Find("EVRSuitManager").GetComponent<EVRSuitManager>();
 
@@ -46,9 +48,20 @@ public class Container_Devices : MonoBehaviour, ScanResultsUpdater.IScanUpdate {
 
         //disable b/c not used
         deviceToggle.SetActive(false);
-	}
+    }
 
-    private void addToggleDevice(BleDevice device)
+    void Update()
+    {
+        foreach(string key in displayedDevices.Keys)
+        {
+            if(displayedDevices.ContainsKey(key))
+            {
+                displayedDevices[key].SetActive(mostRecentUpdates[key].isActive());
+            }
+        }
+    }
+
+    private void addToggleDevice(SensorDevice device)
     {
         //calculated height of scroll container
         count++;
@@ -60,10 +73,10 @@ public class Container_Devices : MonoBehaviour, ScanResultsUpdater.IScanUpdate {
         //create new entry
         GameObject newToggle = Instantiate(Resources.Load("Prefabs/Toggle_Device")) as GameObject;  
         
-        newToggle.name = device.mac;
+        newToggle.name = device.ID;
         newToggle.transform.SetParent(deviceScroll.transform, false);
 
-        displayedDevices.Add(device.mac, newToggle);
+        displayedDevices.Add(device.ID, newToggle);
 
         RectTransform newRect = newToggle.GetComponent<RectTransform>();
         
@@ -80,17 +93,27 @@ public class Container_Devices : MonoBehaviour, ScanResultsUpdater.IScanUpdate {
         newToggle.GetComponentInChildren<Text>().text = device.ToString();
     }
 
-    private void updateToggleDevice(BleDevice device)
+    private void updateToggleDevice(SensorDevice device)
     {
-        displayedDevices[device.mac].GetComponentInChildren<Text>().text = device.ToString();
+        displayedDevices[device.ID].GetComponentInChildren<Text>().text = device.ToString();
     }
 
-    public void postUpdate(BleDevice device)
+    public void postUpdate(SensorDevice device)
     {
-        if (!displayedDevices.ContainsKey(device.mac))
+        if(mostRecentUpdates.ContainsKey(device.ID))
         {
-            addToggleDevice(device);
-        }else
+            mostRecentUpdates[device.ID] = device;
+        }
+        else
+        {
+            mostRecentUpdates.Add(device.ID, device);
+        }
+        if (!displayedDevices.ContainsKey(device.ID))
+        {
+            if(device.isActive())
+                addToggleDevice(device);
+        }
+        else
         {
             updateToggleDevice(device);
         }
@@ -101,7 +124,7 @@ public class Container_Devices : MonoBehaviour, ScanResultsUpdater.IScanUpdate {
         List<string> selected = new List<string>();
         foreach(var pair in displayedDevices)
         {
-            if (pair.Value.GetComponentInChildren<Toggle>().isOn)
+            if (pair.Value.activeSelf && pair.Value.GetComponentInChildren<Toggle>().isOn)
             {
                 selected.Add(pair.Key);
                 Debug.Log(pair.Key);
