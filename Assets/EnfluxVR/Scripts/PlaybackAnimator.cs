@@ -33,6 +33,8 @@ public class PlaybackAnimator : MonoBehaviour {
     private Quaternion chainLower = new Quaternion();
     private Quaternion initCorePose = new Quaternion();
 
+    private IDataRecording dataRecorder;
+
     // Use this for initialization
     void Start()
     {

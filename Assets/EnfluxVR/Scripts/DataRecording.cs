@@ -9,9 +9,23 @@ public class DataRecording : MonoBehaviour {
     private List<float[]> record_lower = new List<float[]>();
     private bool record = false;
 
+    private string fileDir;
+    public string fileName { get; set; }
+
+    void Start()
+    {
+        fileDir = Application.streamingAssetsPath + "/PoseRecordings/";
+        fileName = "poserecord.csv";
+    }
+    
     public void setRecordState(bool state)
     {
         record = state;
+        // If there is recorded data, flush it.
+        if(state == false && (record_upper.Count > 0 || record_lower.Count > 0))
+        {
+            writeData();
+        }
     }
 
     public bool shouldRecord()
@@ -33,11 +47,8 @@ public class DataRecording : MonoBehaviour {
     {
         //get from list
         //format to print to csv
-
-        string filePath = Path.Combine(Application.streamingAssetsPath +
-           "/PoseRecordings/", "test.csv");
-
-        using (var writer = new StreamWriter("Assets/StreamingAssets/PoseRecordings/test.csv"))
+        
+        using (var writer = new StreamWriter(Path.Combine(fileDir, fileName)))
         {
             for (int i = 0; i < record_upper.Count; i++)
             {
