@@ -12,13 +12,16 @@ public class Dropdown_COM : MonoBehaviour {
     private EVRSuitManager _manager;
     private Dropdown self;
 
-    void Start()
+    void Update()
     {
+        // This is like a start function guaranteed to execute after EVRSuitManager
+        if (self != null) return;
         //get object that has list of ports
         _manager =  GameObject.Find("EVRSuitManager").GetComponent<EVRSuitManager>();
         self = gameObject.GetComponent<Dropdown>();
         //get UI element for displaying port
         self.ClearOptions();
+
 
         //display info
         foreach (string port in _manager.ports)
@@ -28,6 +31,7 @@ public class Dropdown_COM : MonoBehaviour {
         //refresh view
         gameObject.GetComponent<Dropdown>().RefreshShownValue();
     }
+    
 
     public void attachSelected()
     {
