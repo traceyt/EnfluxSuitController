@@ -18,7 +18,15 @@ public class EVRSuitManager : MonoBehaviour
     public List<string> ports { get { return _ports; } }
     private List<string> _ports = new List<string>();
     public List<string> connectedDevices;
-    private ConnectionState operatingState = ConnectionState.NONE;
+    private ConnectionState _operatingState;
+    public ConnectionState operatingState {
+        get { return _operatingState; }
+        private set { _operatingState = value;
+            foreach (var button in FindObjectsOfType<ConnectionStateButton>()) //todo events
+                button.SetState(value);
+        }
+    }
+
     private ServerState serverState = ServerState.CLOSED;
     private string host = "127.0.0.1";
     private Int32 port = 12900;
@@ -31,7 +39,7 @@ public class EVRSuitManager : MonoBehaviour
     private ScanResultsUpdater scanUpdater;
     private CallbackQueue callbacks = new CallbackQueue();
 
-    private enum ConnectionState
+    public enum ConnectionState
     {
         NONE,
         ATTACHED,
@@ -73,6 +81,7 @@ public class EVRSuitManager : MonoBehaviour
 
         scanUpdater = GameObject.Find("ScanResultsUpdater").GetComponent<ScanResultsUpdater>();
         EnfluxVRSuit.registerResponseCallbacks(callbacks);
+        operatingState = ConnectionState.NONE;
     }
 
     void OnApplicationQuit()
@@ -233,7 +242,13 @@ public class EVRSuitManager : MonoBehaviour
             {
                 Debug.Log(returnBuffer);
             }
-        }else
+        }
+        if (operatingState == ConnectionState.DISCONNECTED)
+        {
+            // Already disconnected.
+        }
+
+        else
         {
             Debug.Log("Unable to disconnect, program is in wrong state "
                 + Enum.GetName(typeof(ConnectionState), operatingState));

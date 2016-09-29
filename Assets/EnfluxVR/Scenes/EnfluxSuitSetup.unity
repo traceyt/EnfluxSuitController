@@ -240,7 +240,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
---- !u!1001 &761803090
+--- !u!224 &761803091 stripped
+RectTransform:
+  m_PrefabParentObject: {fileID: 22469506, guid: 781ba19e3a538c14e941c6e37781cc79,
+    type: 2}
+  m_PrefabInternal: {fileID: 818864253}
+--- !u!1001 &818864253
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -319,12 +324,7 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 114000013599142126, guid: 781ba19e3a538c14e941c6e37781cc79,
-        type: 2}
-      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 2068837049}
-    - target: {fileID: 114000012581649730, guid: 781ba19e3a538c14e941c6e37781cc79,
+    - target: {fileID: 114000014085475334, guid: 781ba19e3a538c14e941c6e37781cc79,
         type: 2}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -334,19 +334,9 @@ Prefab:
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2068837049}
-    - target: {fileID: 114000014085475334, guid: 781ba19e3a538c14e941c6e37781cc79,
-        type: 2}
-      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 2068837049}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 781ba19e3a538c14e941c6e37781cc79, type: 2}
   m_IsPrefabParent: 0
---- !u!224 &761803091 stripped
-RectTransform:
-  m_PrefabParentObject: {fileID: 22469506, guid: 781ba19e3a538c14e941c6e37781cc79,
-    type: 2}
-  m_PrefabInternal: {fileID: 761803090}
 --- !u!1 &1623007624
 GameObject:
   m_ObjectHideFlags: 0
