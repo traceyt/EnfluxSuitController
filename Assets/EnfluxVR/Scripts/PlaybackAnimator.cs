@@ -35,18 +35,25 @@ public class PlaybackAnimator : MonoBehaviour {
 
     private IDataRecording dataRecorder;
 
+    public string filename { get; set; }
+    [SerializeField]
+    public string fileDirectory = null;
+
     // Use this for initialization
     void Start()
     {
         orientAngles = GameObject.Find("PlaybackAngles")
             .GetComponent<OrientationAngles>();
+        if (fileDirectory == null || fileDirectory == "")
+        {
+            fileDirectory = Application.streamingAssetsPath + "/PoseRecordings/";
+        }
+        filename = "poserecord.csv";
     }
 
-    public void readInData(string filename)
+    public void readInData(string file)
     {
-
-        string filePath = Path.Combine(Application.streamingAssetsPath +
-            "/PoseRecordings/", filename);
+        string filePath = Path.Combine(fileDirectory, file);
 
         var reader = new StreamReader(File.OpenRead(filePath));
 
@@ -74,14 +81,20 @@ public class PlaybackAnimator : MonoBehaviour {
                 Single.Parse(parts[36]),Single.Parse(parts[37]),Single.Parse(parts[38]),Single.Parse(parts[39])};           
             orientAngles.addAngles(f);
         }
-
+        reader.Close();
         Debug.Log("Finished reading in data");
+    }
+
+    public void runPlayback(string file)
+    {
+
+        readInData(file);
+        StartCoroutine(setupAngles());
     }
 
     public void runPlayback()
     {
-        readInData("TheMattLimaYogaClip.csv");
-        StartCoroutine(setupAngles());
+        runPlayback(filename);
     }
 
     public void stopPlayback()
