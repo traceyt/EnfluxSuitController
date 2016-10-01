@@ -75,5 +75,8 @@ Thumbs.db
 
 modulesDB/
 *.log
+*.jar
+
 
 Assets/StreamingAssets/PoseRecordings
+Assets/Plugins/*/ModuleInterface.dll
