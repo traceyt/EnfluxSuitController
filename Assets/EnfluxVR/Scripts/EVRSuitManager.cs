@@ -4,6 +4,10 @@
 //
 //======================================================================
 
+// If running a local server, define this flag.
+// #define NO_APPLICATION
+
+
 using UnityEngine;
 using System;
 using System.IO;
@@ -12,6 +16,7 @@ using System.Net.Sockets;
 using System.Collections;
 using System.Collections.Generic;
 using EnflxStructs;
+
 
 public class EVRSuitManager : MonoBehaviour
 {
@@ -115,7 +120,9 @@ public class EVRSuitManager : MonoBehaviour
 
         if (serverState != ServerState.CLOSED)
         {
+#if !NO_APPLICATION
             serverProcess.Kill();
+#endif
         }
         EnfluxVRSuit.unregisterResponseCallbacks();
 
@@ -132,11 +139,13 @@ public class EVRSuitManager : MonoBehaviour
             "EVRModuleServer.jar");
         serverProcess.StartInfo.FileName = filePath;
 
+
+#if !NO_APPLICATION
         if (serverProcess.Start())
         {
           Debug.Log("Socket server started");
         }
-
+#endif
         //Delay in order to give the server time
         //to launch
         yield return new WaitForSeconds(3);
@@ -211,7 +220,6 @@ public class EVRSuitManager : MonoBehaviour
             {
                 connectedDevices = devices;
                 operatingState = ConnectionState.CONNECTED;
-                //scanUpdater.StopScanning();
                 Debug.Log("Devices connecting");
             }
             else
@@ -326,17 +334,24 @@ public class EVRSuitManager : MonoBehaviour
     private IEnumerator readAngles()
     {
 
-        if (serverState != ServerState.SET)
+        while (serverState != ServerState.SET)
         {
             if (setAnimationMode() < 1)
             {
                 Debug.Log("Mode set");
                 serverState = ServerState.SET;
+                clearStream();
+            }
+            else
+            {
+                // Spin until the stream is initialized
+                yield return null;
             }
         }
 
         //tell server to send data
-        streamWriter.WriteLine(orientationAngles.getMode());
+        string mode = orientationAngles.getMode();
+        streamWriter.WriteLine(mode);
         streamWriter.Flush();
         int formattedAnglesLength = 20;
 
@@ -373,7 +388,10 @@ public class EVRSuitManager : MonoBehaviour
         {
             mode = streamReader.Read();
         }
+        // Animation mode 0 means the stream is not yet initialized
+        if (mode == 0) return 1;
         orientationAngles.setMode(mode);
+        Debug.Log("Mode: " + mode);
         return 0;
     }
 
