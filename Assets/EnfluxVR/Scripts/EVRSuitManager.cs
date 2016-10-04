@@ -71,12 +71,7 @@ public class EVRSuitManager : MonoBehaviour
 
     void Start()
     {
-        StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
-        EnfluxVRSuit.scanPortNames(returnBuffer);
-        if(returnBuffer != null)
-        {
-            _ports.Add(returnBuffer.ToString());
-        }
+        RefreshPorts();
 
         // required so that when socket server launches, does not pause Unity
         Application.runInBackground = true;
@@ -87,6 +82,17 @@ public class EVRSuitManager : MonoBehaviour
         scanUpdater = GameObject.Find("ScanResultsUpdater").GetComponent<ScanResultsUpdater>();
         EnfluxVRSuit.registerResponseCallbacks(callbacks);
         operatingState = ConnectionState.NONE;
+    }
+
+    public void RefreshPorts()
+    {
+        StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
+        EnfluxVRSuit.scanPortNames(returnBuffer);
+        _ports.Clear();
+        if (returnBuffer != null)
+        {
+            _ports.Add(returnBuffer.ToString());
+        }
     }
 
     void OnApplicationQuit()
@@ -446,7 +452,8 @@ public class EVRSuitManager : MonoBehaviour
         StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
 
         if(operatingState == ConnectionState.ATTACHED ||
-            operatingState == ConnectionState.DISCONNECTED)
+            operatingState == ConnectionState.DISCONNECTED ||
+            operatingState == ConnectionState.CONNECTED)
         {
             if (EnfluxVRSuit.detachPort(returnBuffer) < 1)
             {

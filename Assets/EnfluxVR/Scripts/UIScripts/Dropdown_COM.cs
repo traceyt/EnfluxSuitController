@@ -4,6 +4,7 @@
 //
 //======================================================================
 
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,9 +20,14 @@ public class Dropdown_COM : MonoBehaviour {
         //get object that has list of ports
         _manager =  GameObject.Find("EVRSuitManager").GetComponent<EVRSuitManager>();
         self = gameObject.GetComponent<Dropdown>();
+        RefreshPorts();
+    }
+
+    private void RefreshPorts()
+    {
+        _manager.RefreshPorts();
         //get UI element for displaying port
         self.ClearOptions();
-
 
         //display info
         foreach (string port in _manager.ports)
@@ -31,16 +37,15 @@ public class Dropdown_COM : MonoBehaviour {
         //refresh view
         gameObject.GetComponent<Dropdown>().RefreshShownValue();
     }
-    
 
     public void attachSelected()
     {
         string item = self.options[self.value].text;
-        _manager.attachPort(item);        
+        _manager.attachPort(item);
     }
 
     public void detachSelected()
     {
-        _manager.detachPort();        
+        _manager.detachPort();
     }
 }
