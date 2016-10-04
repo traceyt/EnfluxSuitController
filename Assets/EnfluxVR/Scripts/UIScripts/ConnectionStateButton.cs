@@ -24,28 +24,41 @@ class ConnectionStateButton : MonoBehaviour
         EVRSuitManager suitmanager = FindObjectOfType<EVRSuitManager>();
         if (suitmanager != null)
         {
-            SetState(suitmanager.operatingState);
+            SetStateHelper(suitmanager.operatingState);
         }
 
     }
 
     public void SetState(EVRSuitManager.ConnectionState currentState)
     {
+        // Implement an artificial delay
+        GetComponent<Selectable>().interactable = false;
+        StartCoroutine(DelayAndSetState(currentState));
+    }
+
+    private System.Collections.IEnumerator DelayAndSetState(EVRSuitManager.ConnectionState currentState)
+    {
+        yield return new WaitForSeconds (3);
+        SetStateHelper(currentState);
+    }
+
+    private void SetStateHelper(EVRSuitManager.ConnectionState currentState)
+    {
         switch (currentState)
         {
-            case EVRSuitManager.ConnectionState.NONE :
+            case EVRSuitManager.ConnectionState.NONE:
                 GetComponent<Selectable>().interactable = None; break;
-            case EVRSuitManager.ConnectionState.ATTACHED :
+            case EVRSuitManager.ConnectionState.ATTACHED:
                 GetComponent<Selectable>().interactable = Attached; break;
-            case EVRSuitManager.ConnectionState.DETACHED :
+            case EVRSuitManager.ConnectionState.DETACHED:
                 GetComponent<Selectable>().interactable = Detached; break;
-            case EVRSuitManager.ConnectionState.CONNECTED :
+            case EVRSuitManager.ConnectionState.CONNECTED:
                 GetComponent<Selectable>().interactable = Conected; break;
             case EVRSuitManager.ConnectionState.DISCONNECTED:
                 GetComponent<Selectable>().interactable = Disconnected; break;
             case EVRSuitManager.ConnectionState.CALIBRATING:
                 GetComponent<Selectable>().interactable = Calibrating; break;
-            case EVRSuitManager.ConnectionState.STREAMING :
+            case EVRSuitManager.ConnectionState.STREAMING:
                 GetComponent<Selectable>().interactable = Streaming; break;
         }
     }
