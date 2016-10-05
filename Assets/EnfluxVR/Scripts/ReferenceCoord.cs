@@ -39,7 +39,7 @@ public class ReferenceCoord : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
         SteamVRAdapter steam = vrAdapter.GetComponent<SteamVRAdapter>();
         if (steam == null) yield break;
-        GameObject hmd = steam.getHmd();
+        GameObject hmd = steam.hmd;
         if (hmd == null) yield break;
         hmdTrans = hmd.transform;
         baseReference = hmdTrans.localRotation;

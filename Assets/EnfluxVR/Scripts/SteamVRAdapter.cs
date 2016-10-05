@@ -12,13 +12,17 @@ public class SteamVRAdapter : MonoBehaviour
     public GameObject hmd;
     public GameObject eyeLocation;
     public float offset = 1.9f;
-    
+
 
     // Use this for initialization
     void Start()
     {
-        gameObject.transform.rotation = Quaternion
-                .AngleAxis(hmd.transform.rotation.eulerAngles.y, Vector3.up);
+        if (hmd != null)
+        {
+            gameObject.transform.rotation = Quaternion
+                    .AngleAxis(hmd.transform.rotation.eulerAngles.y, Vector3.up);
+
+        }
     }
 
     void Update()
@@ -28,12 +32,9 @@ public class SteamVRAdapter : MonoBehaviour
 
     void LateUpdate()
     {
-
-        gameObject.transform.position = hmd.transform.position - new Vector3(0,offset,0);
-    }
-
-    public GameObject getHmd()
-    {
-        return hmd;
+        if (hmd != null)
+        {
+            gameObject.transform.position = hmd.transform.position - new Vector3(0, offset, 0);
+        }
     }
 }
