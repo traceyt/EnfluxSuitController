@@ -38,25 +38,26 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
 
     public void setInit()
     {
-        initState = InitState.INIT;
-        StartCoroutine(setPoses());        
+        //initState = InitState.INIT;
+        //StartCoroutine(setPoses());
     }
 
     public void resetInit()
     {
         initState = InitState.PREINIT;
+        initCore = new float[] { 0, 0, 0 };
         StopAllCoroutines();
     }
 
     private void setInitRot()
     {
-        initCorePose = jointRotations.rotateCore(new float[] { 0, 0, 0 }, 
+        initCorePose = jointRotations.rotateCore(new float[] { 0, 0, 0 },
             new float[] { 0, 0, 0 }, refCoord.localRotation);
 
-        //set core rotation to get heading right
-        //core.localRotation = initCorePose;
-
         initHeadPose = head.rotation;
+
+        initState = InitState.INIT;
+        StartCoroutine(setPoses());
     }
 
     private IEnumerator setPoses()
@@ -75,7 +76,7 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
                 core.localRotation = corePose.Dequeue();
             }
 
-            if(rightUpperPose.Count > 0)
+            if (rightUpperPose.Count > 0)
             {
                 rightUpper.localRotation = rightUpperPose.Dequeue();
             }
@@ -85,7 +86,7 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
                 rightFore.localRotation = rightForePose.Dequeue();
             }
 
-            if(leftUpperPose.Count > 0)
+            if (leftUpperPose.Count > 0)
             {
                 leftUpper.localRotation = leftUpperPose.Dequeue();
             }
@@ -109,13 +110,17 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
             //do initialization            
             Buffer.BlockCopy((float[])angles.Clone(), 1 * sizeof(float), initCore, 0, 3 * sizeof(float));
 
-            setInitRot();
-
-        } else if (initState == InitState.INIT && angles != null)
+            float initSum = initCore[0] + initCore[1] + initCore[2];
+            if (!Mathf.Approximately(initSum, 0))
+            {
+                setInitRot();
+            }
+        }
+        else if (initState == InitState.INIT && angles != null)
         {
             //core node 1
             float[] coreAngles = new float[] { angles[1], angles[2], angles[3] - initCore[2] };
-            chain = jointRotations.rotateCore(coreAngles, initCore, refCoord.localRotation);            
+            chain = jointRotations.rotateCore(coreAngles, initCore, refCoord.localRotation);
 
             corePose.Enqueue(chain);
 
@@ -127,7 +132,7 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
             leftUpperPose.Enqueue(chain);
 
             //Left Fore node 4
-            float[] lfAngles = new float[] { angles[9], angles[10], angles[11] - initCore[2] };            
+            float[] lfAngles = new float[] { angles[9], angles[10], angles[11] - initCore[2] };
             chain = jointRotations.rotateLeftForearm(lfAngles, core.localRotation,
                 leftUpper.localRotation, refCoord.localRotation);
 
@@ -141,7 +146,7 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
 
             //Right Fore (Animation) Right Fore (User) node 5
             float[] rfAngles = new float[] { angles[17], angles[18], angles[19] - initCore[2] };
-            chain = jointRotations.rotateRightForearm(rfAngles, core.localRotation, 
+            chain = jointRotations.rotateRightForearm(rfAngles, core.localRotation,
                 rightUpper.localRotation, refCoord.localRotation);
 
             rightForePose.Enqueue(chain);
