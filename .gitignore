@@ -1,4 +1,4 @@
-# Windows image file caches
+e# Windows image file caches
 Thumbs.db
 ehthumbs.db
 
@@ -81,3 +81,4 @@ modulesDB/
 
 Assets/StreamingAssets/PoseRecordings
 Assets/Plugins/*/ModuleInterface.dll
+Assets/StreamingAssets/PoseRecordings.meta
