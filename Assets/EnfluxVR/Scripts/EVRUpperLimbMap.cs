@@ -56,11 +56,6 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
         //set core rotation to get heading right
         //core.localRotation = initCorePose;
 
-        if(hmdObject != null)
-        {
-            core.localRotation = Quaternion.AngleAxis(hmdObject.transform.rotation.eulerAngles.y, Vector3.up);
-        }
-        
         initHeadPose = head.rotation;
     }
 
@@ -126,26 +121,26 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
 
             //Left Upper user node 2
             //90 deg transform puts sensor in correct orientation
-            float[] luAngles = new float[] { angles[5], angles[6], angles[7] };
+            float[] luAngles = new float[] { angles[5], angles[6], angles[7] - initCore[2] };
             chain = jointRotations.rotateLeftArm(luAngles, core.localRotation, refCoord.localRotation);
 
             leftUpperPose.Enqueue(chain);
 
             //Left Fore node 4
-            float[] lfAngles = new float[] { angles[9], angles[10], angles[11]};            
+            float[] lfAngles = new float[] { angles[9], angles[10], angles[11] - initCore[2] };            
             chain = jointRotations.rotateLeftForearm(lfAngles, core.localRotation,
                 leftUpper.localRotation, refCoord.localRotation);
 
             leftForePose.Enqueue(chain);
 
             //Right Upper node 3
-            float[] ruAngles = new float[] { angles[13], angles[14], angles[15] };
+            float[] ruAngles = new float[] { angles[13], angles[14], angles[15] - initCore[2] };
             chain = jointRotations.rotateRightArm(ruAngles, core.localRotation, refCoord.localRotation);
 
             rightUpperPose.Enqueue(chain);
 
             //Right Fore (Animation) Right Fore (User) node 5
-            float[] rfAngles = new float[] { angles[17], angles[18], angles[19] };
+            float[] rfAngles = new float[] { angles[17], angles[18], angles[19] - initCore[2] };
             chain = jointRotations.rotateRightForearm(rfAngles, core.localRotation, 
                 rightUpper.localRotation, refCoord.localRotation);
 
