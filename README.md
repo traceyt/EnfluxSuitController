@@ -26,25 +26,18 @@ The Enflux Unity SDK with support for VR, animation recording and playback
 
 ## Instructions for setup with HTC Vive headset
 1. Obtain and import [SteamVR Unity SDK](https://www.assetstore.unity3d.com/en/#!/content/32647)
-2. Under Project tab, expand SteamVR
-  * From SteamVR > Prefabs drag [CameraRig] into Hierarchy
-  * **Dragging into Scene may produce incorrect result"**
-3. If not completed already, follow all **Instructions for setup**
-4. From [EnfluxVR/Prefabs](Assets/EnfluxVR/Prefabs) drag SteamVRAdapter into Hierarchy
-5. In Hierarchy, expand [EnfluxVRHumanoid] and [CameraRig] > Camera (head)
-  * Select [EnfluxVRHumanoid] > EVRUpperLimbMap and drag Camera (eye) onto Hmd Object of EVRUpperLimbMap
-  * Select [EnfluxVRHumanoid] > EVRLowerLimbMap and drag Camera (eye) onto Hmd object of EVRLowerLimbMap
-6. In Hierarchy expand [EnfluxVRHumanoid] > humanoid > Armature > 
-7. In Hierarchy select SteamVRAdapter
-  * drag [CameraRig] > Camera (head) > Camera (eye) onto Hmd of SteamVRAdapter
-  * **THE FOLLOWING STEP IS OPTIONAL AND SHOULD ONLY BE USED IF YOU ARE NOT WORKING WITH THE PANTS**
-  * drag [EnfluxVRHumanoid] > humanoid > Armature > waist onto Waist of SteamVRAdapter
+2. If not completed already, follow section **Instructions for setup**
+3. On [EnfluxVRHumanoid] in Inspector, select Add Component > Scripts > SteamVRAdapter 
+4. Add MainCamera, and CameraMount to SteamVRAdapter public objects
+    * CameraMount found at [EnfluxVRHumanoid] > humanoid > Armature > core > abdomen > abdomen.001 > chest > neck > head
+    * Make sure MainCamera position and rotation are both [0, 0, 0]
+    * In Edit > Project Settings > Player make sure "Virtual Reality Supported" is on
 
 ## Instructions for setup with Oculus Rift
 * Requirements: [Oculus Unity SDK](https://developer3.oculus.com/downloads/)
 1. If not completed already, follow all **Instructions for setup**
 2. In the player character, create a transform where the head is centered facing forward
-3. Add script "Enflux Humanoid Attachment" to the scene. Set the HMD to be the main camera and the eye location to be the head transformation.
+3. Add script "Enflux Humanoid Attachment" to the [EnfluxVRHumanoid]. Set the HMD to be MainCamera and the eye location to be the head transformation.
 4. Any character movement should be set to transform a parent of the main camera. This will move the entire avatar.
 
 
