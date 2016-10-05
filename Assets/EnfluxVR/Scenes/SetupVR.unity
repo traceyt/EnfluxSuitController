@@ -170,10 +170,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 196591564}
-  m_LocalRotation: {x: 0.015630549, y: 0.95623296, z: -0.051999427, w: 0.28752443}
-  m_LocalPosition: {x: -1.56, y: 1.44, z: 4.92}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 6.2251, y: 146.5296, z: -0.00049999997}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -618,6 +618,14 @@ Prefab:
       propertyPath: useCore
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11490680, guid: 9604a0659de6511439e41263667570c9, type: 2}
+      propertyPath: hmdObject
+      value: 
+      objectReference: {fileID: 196591564}
+    - target: {fileID: 11486882, guid: 9604a0659de6511439e41263667570c9, type: 2}
+      propertyPath: hmdObject
+      value: 
+      objectReference: {fileID: 196591564}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9604a0659de6511439e41263667570c9, type: 2}
   m_IsPrefabParent: 0
@@ -641,4 +649,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hmd: {fileID: 196591564}
-  waist: {fileID: 2033612595}
+  eyeLocation: {fileID: 2033612595}

@@ -11,28 +11,26 @@ public class SteamVRAdapter : MonoBehaviour
 
     public GameObject hmd;
     public GameObject eyeLocation;
-
+    public float offset = 1.9f;
+    
 
     // Use this for initialization
     void Start()
     {
-        //body needs to align with headset from the start
-        transform.rotation = Quaternion
+        gameObject.transform.rotation = Quaternion
                 .AngleAxis(hmd.transform.rotation.eulerAngles.y, Vector3.up);
     }
 
     void Update()
     {
-        
+
     }
 
     void LateUpdate()
     {
-        Vector3 difference = hmd.transform.position - eyeLocation.transform.position;
-        transform.Translate(difference);
+
+        gameObject.transform.position = hmd.transform.position - new Vector3(0,offset,0);
     }
-
-
 
     public GameObject getHmd()
     {
