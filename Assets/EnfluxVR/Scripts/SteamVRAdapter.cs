@@ -6,38 +6,33 @@
 
 using UnityEngine;
 
-public class SteamVRAdapter : MonoBehaviour {
+public class SteamVRAdapter : MonoBehaviour
+{
 
-    public GameObject hmd;    
-    public GameObject waist;
-    private Quaternion waistStart;
+    public GameObject hmd;
+    public GameObject eyeLocation;
 
-	// Use this for initialization
-	void Start () {
-        if(hmd != null)
-        {
-            gameObject.transform.SetParent(hmd.transform);
-            GameObject.Find("[EnfluxVRHumanoid]").transform.SetParent(gameObject.transform);
-            gameObject.transform.position = hmd.transform.position;
-            gameObject.transform.rotation = Quaternion
+
+    // Use this for initialization
+    void Start()
+    {
+        //body needs to align with headset from the start
+        transform.rotation = Quaternion
                 .AngleAxis(hmd.transform.rotation.eulerAngles.y, Vector3.up);
-        }
-
-        if( waist != null)
-        {
-            waistStart = Quaternion
-                .AngleAxis(hmd.transform.rotation.eulerAngles.y, Vector3.up);
-        }
     }
 
     void Update()
     {
-        if (waist != null && hmd != null)
-        {
-            waist.transform.localRotation = Quaternion.Inverse(hmd.transform.localRotation) * 
-                waistStart;
-        }
+        
     }
+
+    void LateUpdate()
+    {
+        Vector3 difference = hmd.transform.position - eyeLocation.transform.position;
+        transform.Translate(difference);
+    }
+
+
 
     public GameObject getHmd()
     {

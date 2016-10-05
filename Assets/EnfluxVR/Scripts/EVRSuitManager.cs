@@ -407,6 +407,9 @@ public class EVRSuitManager : MonoBehaviour
         {
             StringBuilder returnBuffer = new StringBuilder(EnfluxVRSuit.MESSAGESIZE);
 
+            //read and set mode
+            streamWriter.WriteLine("stop");
+            streamWriter.Flush();
             if (EnfluxVRSuit.stopRealTime(connectedDevices.Count, returnBuffer) < 1)
             {
                 operatingState = ConnectionState.CONNECTED;
