@@ -9,7 +9,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
+public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator
+{
 
     public bool useCore = false;
     private EVRUpperLimbMap upperReference;
@@ -26,7 +27,7 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
     private Queue<Quaternion> rightShinPose = new Queue<Quaternion>();
     private Queue<Quaternion> leftThighPose = new Queue<Quaternion>();
     private Queue<Quaternion> leftShinPose = new Queue<Quaternion>();
-    
+
     void Start()
     {
 
@@ -37,17 +38,18 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
             upperReference = GameObject.Find("EVRUpperLimbMap").GetComponent<EVRUpperLimbMap>();
             core = upperReference.core;
         }
-    }   
+    }
 
     public void setInit()
     {
-        initState = InitState.INIT;
-        StartCoroutine(setPoses());
+        //initState = InitState.INIT;
+        //StartCoroutine(setPoses());
     }
 
     public void resetInit()
     {
         initState = InitState.PREINIT;
+        initWaist = new float[] { 0, 0, 0 };
         StopAllCoroutines();
     }
 
@@ -57,6 +59,9 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
             new float[] { 0, 0, 0 }, refCoord.localRotation);
 
         waist.localRotation = initWaistPose;
+
+        initState = InitState.INIT;
+        StartCoroutine(setPoses());
     }
 
     private IEnumerator setPoses()
@@ -94,19 +99,26 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
 
     public void operate(float[] angles)
     {
-        if(angles != null)
+        if (angles != null)
         {
             if (initState == InitState.PREINIT && angles != null)
             {
                 if (!useCore)
                 {
                     Buffer.BlockCopy((float[])angles.Clone(), 1 * sizeof(float), initWaist, 0, 3 * sizeof(float));
-                }else
+                }
+                else
                 {
                     initWaist = upperReference.getCoreInit();
                 }
 
-                setInitRot();
+                float initSum = initWaist[0] + initWaist[1] + initWaist[2];
+
+                if (!Mathf.Approximately(initSum, 0))
+                {
+                    setInitRot();
+                }
+
             }
             else if (initState == InitState.INIT)
             {
@@ -115,7 +127,8 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator {
                     //core node 1
                     float[] waistAngles = new float[] { angles[1], angles[2], angles[3] - initWaist[2] };
                     chain = jointRotations.rotateWaist(waistAngles, initWaist, refCoord.localRotation);
-                }else
+                }
+                else
                 {
                     chain = core.localRotation;
                 }
