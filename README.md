@@ -3,6 +3,10 @@ The Enflux Unity SDK with support for VR, animation recording and playback
 
 **Documentation and tutorial updating, check back frequently**
 
+## Requirements
+* Bluegiga driver found [here](http://www.picaxe.com/downloads/bled112.zip)
+* JRE 8 found [here](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
+
 ## UnitySDK
 * Check [releases tab](https://github.com/Enflux/EnfluxSuitController/releases)
 
