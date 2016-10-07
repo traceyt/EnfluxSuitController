@@ -178,21 +178,10 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &196591570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 196591564}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e933e81d3c20c74ea6fdc708a67e3a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  queueAhead: 1
-  _trackingOriginType: 1
-  usePositionTracking: 1
-  resetTrackerOnLoad: 0
+--- !u!1 &581643031 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 174796, guid: 9604a0659de6511439e41263667570c9, type: 2}
+  m_PrefabInternal: {fileID: 2067030841}
 --- !u!1 &706892988
 GameObject:
   m_ObjectHideFlags: 0
@@ -790,9 +779,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hmd: {fileID: 196591564}
   eyeLocation: {fileID: 2033612595}
---- !u!114 &2137814336 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11424020, guid: 9604a0659de6511439e41263667570c9,
-    type: 2}
-  m_PrefabInternal: {fileID: 2067030841}
-  m_Script: {fileID: 11500000, guid: 40eafdf8025fa0e40815922d4d6ff1f0, type: 3}
+  humanoid: {fileID: 581643031}

@@ -11,12 +11,13 @@ public class SteamVRAdapter : MonoBehaviour
 {
     public GameObject hmd;
     public GameObject eyeLocation;
+    public GameObject humanoid;    
 
     // Use this for initialization
     void Start()
     {
-        transform.localRotation = Quaternion
-            .AngleAxis(transform.rotation.eulerAngles.y, Vector3.up);
+        humanoid.transform.rotation = Quaternion
+            .AngleAxis(hmd.transform.rotation.eulerAngles.y, Vector3.up);
     }
 
     void Update()
@@ -25,10 +26,7 @@ public class SteamVRAdapter : MonoBehaviour
 
     void LateUpdate()
     {
-        if (hmd != null)
-        {
-            Vector3 difference = hmd.transform.position - eyeLocation.transform.position;
-            transform.Translate(difference, Space.World);
-        }
+        Vector3 difference = hmd.transform.position - eyeLocation.transform.position;
+        transform.Translate(difference);
     }
 }
