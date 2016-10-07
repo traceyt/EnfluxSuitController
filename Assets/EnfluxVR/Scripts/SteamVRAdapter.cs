@@ -1,4 +1,4 @@
-﻿//========= Copyright 2016, Enflux Inc. All rights reserved. ===========
+﻿e//========= Copyright 2016, Enflux Inc. All rights reserved. ===========
 //
 // Purpose: Demo adapter for use with SteamVR and HTC Vive
 //
