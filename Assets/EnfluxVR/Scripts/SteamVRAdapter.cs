@@ -6,6 +6,7 @@
 
 using UnityEngine;
 
+[RequireComponent (typeof(EVRHumanoidLimbMap))]
 public class SteamVRAdapter : MonoBehaviour
 {
     public GameObject hmd;
