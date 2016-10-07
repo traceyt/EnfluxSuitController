@@ -2,25 +2,28 @@
 using System.Collections;
 
 
-public class EnfluxHumaniodAttachment : MonoBehaviour {
+public class EnfluxHumaniodAttachment : MonoBehaviour
+{
 
     public GameObject eyeLocation;
     public GameObject HMD;
 
-	// Use this for initialization
-	void Start () {
-    }
-	    
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-    void LateUpdate ()
+    // Use this for initialization
+    void Start()
     {
-        Vector3 difference = HMD.transform.position - eyeLocation.transform.position;
-        transform.Translate(difference);
-
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+    }
+
+    void LateUpdate()
+    {
+        if (HMD != null)
+        {
+            Vector3 difference = HMD.transform.position - eyeLocation.transform.position;
+            transform.Translate(difference);
+        }
+    }
 }

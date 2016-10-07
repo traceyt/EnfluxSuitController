@@ -177,10 +177,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!1 &581643031 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 174796, guid: 9604a0659de6511439e41263667570c9, type: 2}
-  m_PrefabInternal: {fileID: 2067030841}
 --- !u!1 &706892988
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,7 +650,8 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 0.01
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9555296, guid: 9604a0659de6511439e41263667570c9, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 9604a0659de6511439e41263667570c9, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &2067030842 stripped
@@ -678,4 +675,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hmd: {fileID: 196591564}
   eyeLocation: {fileID: 2033612595}
-  humanoid: {fileID: 581643031}
