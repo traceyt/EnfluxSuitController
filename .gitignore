@@ -1,4 +1,4 @@
-e# Windows image file caches
+# Windows image file caches
 Thumbs.db
 ehthumbs.db
 
@@ -78,7 +78,20 @@ modulesDB/
 *.log
 *.jar
 
+# ============== #
+# Enflux project #
+# ============== #
 
+# Saved poses
 Assets/StreamingAssets/PoseRecordings
-Assets/Plugins/*/ModuleInterface.dll
 Assets/StreamingAssets/PoseRecordings.meta
+
+# Bluetooth connection dll
+ModuleInterface.*
+
+# All other dll's should be maintained by force commits
+*.dll
+
+# Get this package at Oculus.com
+Assets/3rdParty/OVR
+
