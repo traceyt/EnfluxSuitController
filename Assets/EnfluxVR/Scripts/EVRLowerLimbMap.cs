@@ -28,6 +28,21 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator
     private Queue<Quaternion> leftThighPose = new Queue<Quaternion>();
     private Queue<Quaternion> leftShinPose = new Queue<Quaternion>();
 
+    // Correct the values based on a known starting pose.
+    // Can be set by a direct event or delay called by DoCorrection();
+    public bool correction { get; set; }
+    private Quaternion waistBase;
+    private Quaternion rThighBase;
+    private Quaternion rShinBase;
+    private Quaternion lThighBase;
+    private Quaternion lShinBase;
+
+    private Quaternion waistCorrection = Quaternion.identity;
+    private Quaternion rThighCorrection = Quaternion.identity;
+    private Quaternion rShinCorrection = Quaternion.identity;
+    private Quaternion lThighCorrection = Quaternion.identity;
+    private Quaternion lShinCorrection = Quaternion.identity;
+
     void Start()
     {
 
@@ -68,6 +83,17 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator
     {
         while (true)
         {
+            if (correction && (waistPose.Count > 0))
+            {
+                Debug.Log("Correcting Angles");
+                waistCorrection = Quaternion.Inverse(waistPose.Dequeue()) * waistBase;
+                rThighCorrection = Quaternion.Inverse(rightThighPose.Dequeue()) * rThighBase;
+                rShinCorrection = Quaternion.Inverse(rightShinPose.Dequeue()) * rShinBase;
+                lThighCorrection = Quaternion.Inverse(leftThighPose.Dequeue()) * lThighBase;
+                lShinCorrection = Quaternion.Inverse(leftShinPose.Dequeue()) * lShinBase;
+                correction = false;
+            }
+
             if (waistPose.Count > 0)
             {
                 waist.localRotation = waistPose.Dequeue();
@@ -165,4 +191,25 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator
             }
         }
     }
+
+    public void NoCorrection()
+    {
+        waistCorrection = Quaternion.identity;
+        rThighCorrection = Quaternion.identity;
+        rShinCorrection = Quaternion.identity;
+        lThighCorrection = Quaternion.identity;
+        lShinCorrection = Quaternion.identity;
+    }
+
+    public void DoCorrection()
+    {
+        StartCoroutine(WaitandUpdate());
+    }
+
+    public IEnumerator WaitandUpdate(float delay = 5.0f)
+    {
+        yield return new WaitForSeconds(delay);
+        correction = true;
+    }
+
 }

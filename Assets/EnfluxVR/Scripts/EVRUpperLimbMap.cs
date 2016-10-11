@@ -26,9 +26,32 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
     private Queue<Quaternion> leftUpperPose = new Queue<Quaternion>();
     private Queue<Quaternion> leftForePose = new Queue<Quaternion>();
 
+
+    // Correct the values based on a known starting pose.
+    // Can be set by a direct event or delay called by DoCorrection();
+    public bool correction { get; set; }
+    private Quaternion coreBase;
+    private Quaternion rightUpperBase;
+    private Quaternion rightForeBase;
+    private Quaternion leftUpperBase;
+    private Quaternion leftForeBase;
+
+    private Quaternion coreCorrection = Quaternion.identity;
+    private Quaternion rightUpperCorrection = Quaternion.identity;
+    private Quaternion rightForeCorrection = Quaternion.identity;
+    private Quaternion leftUpperCorrection = Quaternion.identity;
+    private Quaternion leftForeCorrection = Quaternion.identity;
+
     void Start()
     {
         refCoord = GameObject.Find("ReferenceCoord").transform;
+        //grab all the original transforms
+
+        coreBase = core.localRotation;
+        rightUpperBase = rightUpper.localRotation;
+        rightForeBase = rightFore.localRotation;
+        leftUpperBase = leftUpper.localRotation;
+        leftForeBase = leftFore.localRotation;
     }
 
     public float[] getCoreInit()
@@ -64,6 +87,16 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
     {
         while (true)
         {
+            if(correction)
+            {
+                Debug.Log("Correcting Angles");
+                coreCorrection = Quaternion.Inverse(corePose.Dequeue()) * coreBase;
+                rightUpperCorrection = Quaternion.Inverse(rightUpperPose.Dequeue()) * rightUpperBase;
+                rightForeCorrection = Quaternion.Inverse(rightForePose.Dequeue()) * rightForeBase;
+                leftUpperCorrection = Quaternion.Inverse(leftUpperPose.Dequeue()) * leftUpperBase;
+                leftForeCorrection = Quaternion.Inverse(leftForePose.Dequeue()) * leftForeBase;
+                correction = false;
+            }
 
             //only animate the head if there is a hmd
             if (hmdObject != null)
@@ -73,27 +106,27 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
 
             if (corePose.Count > 0)
             {
-                core.localRotation = corePose.Dequeue();
+                core.localRotation = corePose.Dequeue() * coreCorrection;
             }
 
             if (rightUpperPose.Count > 0)
             {
-                rightUpper.localRotation = rightUpperPose.Dequeue();
+                rightUpper.localRotation = rightUpperPose.Dequeue() * rightUpperCorrection;
             }
 
             if (rightForePose.Count > 0)
             {
-                rightFore.localRotation = rightForePose.Dequeue();
+                rightFore.localRotation = rightForePose.Dequeue() * rightForeCorrection;
             }
 
             if (leftUpperPose.Count > 0)
             {
-                leftUpper.localRotation = leftUpperPose.Dequeue();
+                leftUpper.localRotation = leftUpperPose.Dequeue() * leftUpperCorrection;
             }
 
             if (leftForePose.Count > 0)
             {
-                leftFore.localRotation = leftForePose.Dequeue();
+                leftFore.localRotation = leftForePose.Dequeue() * leftForeCorrection;
             }
 
             yield return null;
@@ -103,6 +136,7 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
     //interface method
     public void operate(float[] angles)
     {
+        
         //parse angles
         //apply to upper        
         if (initState == InitState.PREINIT && angles != null)
@@ -151,5 +185,25 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
 
             rightForePose.Enqueue(chain);
         }
+    }
+
+    public void NoCorrection()
+    {
+        coreCorrection = Quaternion.identity;
+        rightUpperCorrection = Quaternion.identity;
+        rightForeCorrection = Quaternion.identity;
+        leftUpperCorrection = Quaternion.identity;
+        leftForeCorrection = Quaternion.identity;
+    }
+
+    public void DoCorrection()
+    {
+        StartCoroutine(WaitandUpdate());
+    }
+
+    public IEnumerator WaitandUpdate(float delay = 5.0f)
+    {
+        yield return new WaitForSeconds(delay);
+        correction = true;
     }
 }
