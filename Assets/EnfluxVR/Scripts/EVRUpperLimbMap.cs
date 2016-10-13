@@ -87,9 +87,14 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
     {
         while (true)
         {
-            if(correction)
+            if (corePose.Count == 0 || rightUpperPose.Count == 0 ||
+                rightForePose.Count == 0 || leftUpperPose.Count == 0 || leftForePose.Count == 0)
             {
-                Debug.Log("Correcting Angles");
+                // Poll until we have poses for all joints
+            }
+            else if (correction)
+            {
+                Debug.Log("Correcting Upper Angles");
                 coreCorrection = Quaternion.Inverse(corePose.Dequeue()) * coreBase;
                 rightUpperCorrection = Quaternion.Inverse(rightUpperPose.Dequeue()) * rightUpperBase;
                 rightForeCorrection = Quaternion.Inverse(rightForePose.Dequeue()) * rightForeBase;
@@ -97,38 +102,20 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
                 leftForeCorrection = Quaternion.Inverse(leftForePose.Dequeue()) * leftForeBase;
                 correction = false;
             }
-
-            //only animate the head if there is a hmd
-            if (hmdObject != null)
+            else
             {
-                head.rotation = hmdObject.transform.rotation;
-            }
-
-            if (corePose.Count > 0)
-            {
+                //only animate the head if there is a hmd
+                if (hmdObject != null)
+                {
+                    head.rotation = hmdObject.transform.rotation;
+                }
+            
                 core.localRotation = corePose.Dequeue() * coreCorrection;
-            }
-
-            if (rightUpperPose.Count > 0)
-            {
                 rightUpper.localRotation = rightUpperPose.Dequeue() * rightUpperCorrection;
-            }
-
-            if (rightForePose.Count > 0)
-            {
                 rightFore.localRotation = rightForePose.Dequeue() * rightForeCorrection;
-            }
-
-            if (leftUpperPose.Count > 0)
-            {
                 leftUpper.localRotation = leftUpperPose.Dequeue() * leftUpperCorrection;
-            }
-
-            if (leftForePose.Count > 0)
-            {
                 leftFore.localRotation = leftForePose.Dequeue() * leftForeCorrection;
             }
-
             yield return null;
         }
     }
@@ -196,14 +183,15 @@ public class EVRUpperLimbMap : EVRHumanoidLimbMap, ILimbAnimator
         leftForeCorrection = Quaternion.identity;
     }
 
-    public void DoCorrection()
+    public void DoCorrection(float delay = 3.0f)
     {
-        StartCoroutine(WaitandUpdate());
+        StartCoroutine(WaitandUpdate(delay));
     }
 
-    public IEnumerator WaitandUpdate(float delay = 5.0f)
+    public IEnumerator WaitandUpdate(float delay = 3.0f)
     {
-        yield return new WaitForSeconds(delay);
+        if(delay > 0f)
+            yield return new WaitForSeconds(delay);
         correction = true;
     }
 }

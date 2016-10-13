@@ -48,6 +48,12 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator
 
         refCoord = GameObject.Find("ReferenceCoord").transform;
 
+        waistBase = waist.localRotation;
+        rThighBase = rightThigh.localRotation;
+        rShinBase = rightShin.localRotation;
+        lThighBase = leftThigh.localRotation;
+        lShinBase = leftShin.localRotation;
+
         if (useCore)
         {
             upperReference = GameObject.Find("EVRUpperLimbMap").GetComponent<EVRUpperLimbMap>();
@@ -83,9 +89,15 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator
     {
         while (true)
         {
-            if (correction && (waistPose.Count > 0))
+
+            if (waistPose.Count == 0 || rightThighPose.Count == 0 ||
+                rightShinPose.Count == 0 || leftThighPose.Count == 0 || leftShinPose.Count == 0)
             {
-                Debug.Log("Correcting Angles");
+                // Poll until we have poses for all joints
+            }
+            else if (correction)
+            {
+                Debug.Log("Correcting Lower Angles");
                 waistCorrection = Quaternion.Inverse(waistPose.Dequeue()) * waistBase;
                 rThighCorrection = Quaternion.Inverse(rightThighPose.Dequeue()) * rThighBase;
                 rShinCorrection = Quaternion.Inverse(rightShinPose.Dequeue()) * rShinBase;
@@ -93,32 +105,14 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator
                 lShinCorrection = Quaternion.Inverse(leftShinPose.Dequeue()) * lShinBase;
                 correction = false;
             }
-
-            if (waistPose.Count > 0)
+            else
             {
-                waist.localRotation = waistPose.Dequeue();
+                waist.localRotation = waistPose.Dequeue() * waistCorrection;
+                rightThigh.localRotation = rightThighPose.Dequeue() * rThighCorrection;
+                rightShin.localRotation = rightShinPose.Dequeue() * rShinCorrection;
+                leftThigh.localRotation = leftThighPose.Dequeue() * lThighCorrection;
+                leftShin.localRotation = leftShinPose.Dequeue() * lShinCorrection;
             }
-
-            if (rightThighPose.Count > 0)
-            {
-                rightThigh.localRotation = rightThighPose.Dequeue();
-            }
-
-            if (rightShinPose.Count > 0)
-            {
-                rightShin.localRotation = rightShinPose.Dequeue();
-            }
-
-            if (leftThighPose.Count > 0)
-            {
-                leftThigh.localRotation = leftThighPose.Dequeue();
-            }
-
-            if (leftShinPose.Count > 0)
-            {
-                leftShin.localRotation = leftShinPose.Dequeue();
-            }
-
             yield return null;
         }
     }
@@ -201,12 +195,12 @@ public class EVRLowerLimbMap : EVRHumanoidLimbMap, ILimbAnimator
         lShinCorrection = Quaternion.identity;
     }
 
-    public void DoCorrection()
+    public void DoCorrection(float delay = 3.0f)
     {
-        StartCoroutine(WaitandUpdate());
+        StartCoroutine(WaitandUpdate(delay));
     }
 
-    public IEnumerator WaitandUpdate(float delay = 5.0f)
+    public IEnumerator WaitandUpdate(float delay = 3.0f)
     {
         yield return new WaitForSeconds(delay);
         correction = true;

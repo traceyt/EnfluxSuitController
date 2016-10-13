@@ -57,7 +57,7 @@ public class EVRInitializationCounter : MonoBehaviour {
             {
                 _manager.enableAnimate(record);
             }
-            
+
             count--;            
         }
 

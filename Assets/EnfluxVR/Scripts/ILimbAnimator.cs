@@ -9,4 +9,5 @@ public interface ILimbAnimator {
     void operate(float[] angles);
     void setInit();
     void resetInit();
+    void DoCorrection(float delay = 3.0f);
 }

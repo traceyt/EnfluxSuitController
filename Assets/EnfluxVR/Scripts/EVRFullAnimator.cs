@@ -15,7 +15,7 @@ public class EVRFullAnimator : EVRHumanoidLimbMap, ILimbAnimator {
     private DataRecording recorder;
     private float[] upper = new float[20];
     private float[] lower = new float[20];
-
+    
     //temporary
     private bool shouldInit = false;
 
@@ -67,5 +67,10 @@ public class EVRFullAnimator : EVRHumanoidLimbMap, ILimbAnimator {
                 shouldInit = false;
             }
         }
+    }
+    public void DoCorrection(float delay = 3.0f)
+    {
+        upperAnim.DoCorrection();
+        lowerAnim.DoCorrection();
     }
 }

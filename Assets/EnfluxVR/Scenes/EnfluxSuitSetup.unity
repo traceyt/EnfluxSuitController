@@ -350,6 +350,39 @@ Prefab:
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2068837049}
+    - target: {fileID: 114000011923660648, guid: 781ba19e3a538c14e941c6e37781cc79,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DoCorrection
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000011923660648, guid: 781ba19e3a538c14e941c6e37781cc79,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000011923660648, guid: 781ba19e3a538c14e941c6e37781cc79,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_FloatArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000012318687106, guid: 781ba19e3a538c14e941c6e37781cc79, type: 2}
+      propertyPath: m_Name
+      value: Btn_ResetShirt
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000011494783018, guid: 781ba19e3a538c14e941c6e37781cc79, type: 2}
+      propertyPath: m_Name
+      value: Btn_ResetPants
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000010930393482, guid: 781ba19e3a538c14e941c6e37781cc79,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000010930393482, guid: 781ba19e3a538c14e941c6e37781cc79,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_FloatArgument
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 781ba19e3a538c14e941c6e37781cc79, type: 2}
   m_IsPrefabParent: 0
@@ -564,52 +597,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
---- !u!1 &2007468606 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1000011494783018, guid: 781ba19e3a538c14e941c6e37781cc79,
-    type: 2}
-  m_PrefabInternal: {fileID: 818864253}
---- !u!114 &2007468607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2007468606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfe566ef5b9f3b3448980d4765199369, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  None: 0
-  Attached: 0
-  Detached: 0
-  Conected: 0
-  Disconnected: 0
-  Calibrating: 0
-  Streaming: 1
---- !u!1 &2037838726 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1000012318687106, guid: 781ba19e3a538c14e941c6e37781cc79,
-    type: 2}
-  m_PrefabInternal: {fileID: 818864253}
---- !u!114 &2037838727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2037838726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfe566ef5b9f3b3448980d4765199369, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  None: 0
-  Attached: 0
-  Detached: 0
-  Conected: 0
-  Disconnected: 0
-  Calibrating: 0
-  Streaming: 1
 --- !u!1001 &2067030841
 Prefab:
   m_ObjectHideFlags: 0
